@@ -20,11 +20,11 @@ function main() {
 
 	// Get the rendering context for WebGL
 	var gl = getWebGLContext(canvas);
-	var gl = getWebGLContext(canvas);
 	if (!gl) {
 		console.log('Failed to get the rendering context for WebGL');
 		return;
 	}
+
 	// Initialize shaders
 	if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
 		console.log('Failed to initialize shaders.');
@@ -64,11 +64,6 @@ function initVertexBuffers(gl) {
 		console.log('Failed to create the buffer object of vertexes');
 		return -1;
 	}
-	var ratiusBuffer = gl.createBuffer();
-	if (!ratiusBuffer) {
-		console.log('Failed to create the buffer object of ratiuses');
-		return -1;
-	}
 
 	// Bind the buffer object to target
 	gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
@@ -82,7 +77,7 @@ function initVertexBuffers(gl) {
 	}
 
 	// Assign the buffer object to a_Position variable
-	gl.vertexAttribPointer(a_PointSize, 2, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0);
 	// Enable the assignment to a_Position variable
 	gl.enableVertexAttribArray(a_Position);
 
@@ -91,6 +86,13 @@ function initVertexBuffers(gl) {
 //------------------------------
 	var radios = new Float32Array(
 		[10.0, 20.0, 30.0]);
+
+	var ratiusBuffer = gl.createBuffer();
+	if (!ratiusBuffer) {
+		console.log('Failed to create the buffer object of ratiuses');
+		return -1;
+	}
+	
 	// Bind the buffer object to target ratiuses
 	gl.bindBuffer(gl.ARRAY_BUFFER, ratiusBuffer);
 	
