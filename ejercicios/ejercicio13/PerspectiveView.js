@@ -94,6 +94,9 @@ var obj = JSON.parse(text);
 	draw(gl);
 
 	canvas.onkeydown = function(ev){ keydown(ev, gl, n, u_ViewMatrix,viewMatrix); };
+
+	// Register function (event handler) to be called on a mouse press
+    canvas.onmousemove = function(ev) { alert('se miueveo'); };
 }
 
 
