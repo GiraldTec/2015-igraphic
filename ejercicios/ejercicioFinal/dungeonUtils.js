@@ -13,17 +13,23 @@ function makeZone(xCoord,yCoord,maxR,maxC,map){
 		var zone = {
 			x : '',
 			y : '',
-			floor : '',
-			ceiling : '',
-			wall : '',
+			t_floor : '',
+			t_ceiling : '',
+			t_wall : '',
+			m_floor : {},
+			m_ceiling : {},
+			m_n_wall : {},
+			m_s_wall : {},
+			m_w_wall : {},
+			m_e_wall : {},
 			north : 'yes',
 			south : 'yes',
 			west : 'yes',
 			east : 'yes'
 		}
-		zone['floor'] = zoneStats[0];
-		zone['ceiling'] = zoneStats[1];
-		zone['wall'] = zoneStats[2];
+		zone['t_floor'] = zoneStats[0];
+		zone['t_ceiling'] = zoneStats[1];
+		zone['t_wall'] = zoneStats[2];
 
 		zone['x'] = xCoord;
 		zone['y'] = yCoord;
@@ -32,7 +38,16 @@ function makeZone(xCoord,yCoord,maxR,maxC,map){
 		if(xCoord+1<maxC && map[yCoord][xCoord+1].split('-')[0] != 0) zone['east']='no';
 		if(yCoord-1>=0 && map[yCoord-1][xCoord].split('-')[0] != 0) zone['north']='no';
 		if(yCoord+1<maxR && map[yCoord+1][xCoord].split('-')[0] != 0) zone['south']='no';
-		if(zone['floor']==3)
+
+
+		zone['m_floor'] = makeFloorMatrix(zone);
+		zone['m_ceiling'] = makeCeilingMatrix(zone);
+		if(zone['north']=='yes') zone['m_n_wall'] = makeWallMatrix('north',zone);
+		if(zone['south']=='yes') zone['m_s_wall'] = makeWallMatrix('south',zone);
+		if(zone['west']=='yes') zone['m_w_wall'] = makeWallMatrix('west',zone);
+		if(zone['east']=='yes') zone['m_e_wall'] = makeWallMatrix('east',zone);
+
+		if(zone['t_floor']==3)
 			dungeon['start']={xCoord,yCoord};
 		return zone;
 	}else{
@@ -64,4 +79,35 @@ function loadDungeonFile(file) {
   }
   makeZones(dungeon['rows'],dungeon['cols'],dungeon['map']);
   var a = 2;
+}
+
+
+function makeFloorCoordColors(zone){
+	var floor =  new Float32Array([
+    // Vertex coordinates and color(RGBA)
+    0.0, 0.0,  0.0,  0.4,  1.0,  0.4, 
+    0.0, 1.0,  0.0,  0.4,  1.0,  0.4,
+    1.0, 1.0,  0.0,  1.0,  0.4,  0.4, 
+    1.0, 0.0,  0.0,  0.4,  1.0,  0.4]);
+	return floor;
+}
+
+function makeCeilingCoordColors(zone){
+	var floor =  new Float32Array([
+    // Vertex coordinates and color(RGBA)
+    0.0, 1.0,  0.0,  0.4,  1.0,  0.4,
+    0.0, 0.0,  0.0,  0.4,  1.0,  0.4, 
+    1.0, 0.0,  0.0,  0.4,  1.0,  0.4,
+    1.0, 1.0,  0.0,  1.0,  0.4,  0.4]);
+	return floor;
+}
+
+function makeWallCoordColors(card,zone){
+	var floor =  new Float32Array([
+    // Vertex coordinates and color(RGBA)
+    0.0, 0.0,  1.0,  0.4,  1.0,  0.4,
+    0.0, 0.0,  0.0,  0.4,  1.0,  0.4, 
+    1.0, 0.0,  0.0,  0.4,  1.0,  0.4,
+    1.0, 0.0,  1.0,  1.0,  0.4,  0.4]);
+	return floor;
 }
