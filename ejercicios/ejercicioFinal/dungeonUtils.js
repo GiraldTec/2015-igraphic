@@ -1,53 +1,63 @@
-var dungeon = {
-	rows : 0,
-	cols : 0,
-	map : {},
-	zones : {},
-	start :''
+function Dungeon (){
+	this.rows = 0;
+	this.cols = 0;
+	this.map = [];
+	this.zones = [];
+	this.start = '';
 }
 
-function makeZone(xCoord,yCoord,maxR,maxC,map){
+function Zone () {
+			this.x = -1;
+			this.y = -1;
+
+			this.vertex_floor = [];
+		}
+
+function makeZone_Deprecated(xCoord,yCoord,maxR,maxC,map){
 	var cell = map[yCoord][xCoord];
 	var zoneStats = cell.split('-');
 	if (zoneStats[0]!='0' && zoneStats[1]!='0' && zoneStats[2]!='0'){
 		var zone = {
 			x : '',
 			y : '',
-			t_floor : '',
-			t_ceiling : '',
-			t_wall : '',
-			m_floor : {},
-			m_ceiling : {},
-			m_n_wall : {},
-			m_s_wall : {},
-			m_w_wall : {},
-			m_e_wall : {},
-			north : 'yes',
-			south : 'yes',
-			west : 'yes',
-			east : 'yes'
+			type_floor : '',
+			type_ceiling : '',
+			type_wall : '',
+
+			vertex_floor : {},
+			vertex_ceiling : {},
+
+			vertex_n_wall : {},
+			vertex_s_wall : {},
+			vertex_w_wall : {},
+			vertex_e_wall : {},
+
+			has_north_wall : 'yes',
+			has_south_wall : 'yes',
+			has_west_wall : 'yes',
+			has_east_wall : 'yes'
 		}
-		zone['t_floor'] = zoneStats[0];
-		zone['t_ceiling'] = zoneStats[1];
-		zone['t_wall'] = zoneStats[2];
+		zone['type_floor'] = zoneStats[0];
+		zone['type_ceiling'] = zoneStats[1];
+		zone['type_wall'] = zoneStats[2];
 
 		zone['x'] = xCoord;
 		zone['y'] = yCoord;
 
-		if(xCoord-1>=0 && map[yCoord][xCoord-1].split('-')[0] != 0) zone['west']='no';
-		if(xCoord+1<maxC && map[yCoord][xCoord+1].split('-')[0] != 0) zone['east']='no';
-		if(yCoord-1>=0 && map[yCoord-1][xCoord].split('-')[0] != 0) zone['north']='no';
-		if(yCoord+1<maxR && map[yCoord+1][xCoord].split('-')[0] != 0) zone['south']='no';
+		if(xCoord-1>=0 && map[yCoord][xCoord-1].split('-')[0] != 0) zone['has_west_wall']='no';
+		if(xCoord+1<maxC && map[yCoord][xCoord+1].split('-')[0] != 0) zone['has_east_wall']='no';
+		if(yCoord-1>=0 && map[yCoord-1][xCoord].split('-')[0] != 0) zone['has_north_wall']='no';
+		if(yCoord+1<maxR && map[yCoord+1][xCoord].split('-')[0] != 0) zone['has_south_wall']='no';
 
 
-		zone['m_floor'] = makeFloorMatrix(zone);
-		zone['m_ceiling'] = makeCeilingMatrix(zone);
-		if(zone['north']=='yes') zone['m_n_wall'] = makeWallMatrix('north',zone);
-		if(zone['south']=='yes') zone['m_s_wall'] = makeWallMatrix('south',zone);
-		if(zone['west']=='yes') zone['m_w_wall'] = makeWallMatrix('west',zone);
-		if(zone['east']=='yes') zone['m_e_wall'] = makeWallMatrix('east',zone);
+		zone['vertex_floor'] = makeFloorVerTex(zone);
+		zone['vertex_ceiling'] = makeCeilingVerTex(zone);
+		if(zone['has_north_wall']=='yes') zone['vertex_n_wall'] = makeWallVerTex('has_north_wall',zone);
+		if(zone['has_south_wall']=='yes') zone['vertex_s_wall'] = makeWallVerTex('has_south_wall',zone);
+		if(zone['has_west_wall']=='yes') zone['vertex_w_wall'] = makeWallVerTex('has_west_wall',zone);
+		if(zone['has_east_wall']=='yes') zone['vertex_e_wall'] = makeWallVerTex('has_east_wall',zone);
 
-		if(zone['t_floor']==3)
+		if(zone['type_floor']==3)
 			dungeon['start']={xCoord,yCoord};
 		return zone;
 	}else{
@@ -70,39 +80,40 @@ function makeZones(maxR,maxC,map){
 
 function loadDungeonFile(file) {
   var lines = file.split('\n');
-  dungeon['rows'] = lines.length;
+  dungeon = new Dungeon();
+  dungeon.rows = lines.length;
   for(var i = 0; i < lines.length; i++){
   	var line = lines[i].split(':');
-  	if(i==0)dungeon['cols'] = line.length;
-		dungeon['map'][i] = line;
+  	if(i==0)dungeon.cols = line.length;
+		dungeon.map[i] = line;
 		// crear objeto de Mazmorra
   }
+  window.alert(dungeon.map);
   makeZones(dungeon['rows'],dungeon['cols'],dungeon['map']);
-  var a = 2;
 }
 
 
-function makeFloorCoordColors(zone){
+function makeFloorVerTex(zone){
 	var floor =  new Float32Array([
     // Vertex coordinates and color(RGBA)
-    0.0, 0.0,  0.0,  0.4,  1.0,  0.4, 
-    0.0, 1.0,  0.0,  0.4,  1.0,  0.4,
-    1.0, 1.0,  0.0,  1.0,  0.4,  0.4, 
-    1.0, 0.0,  0.0,  0.4,  1.0,  0.4]);
+    0.0, 0.0,  0.0,  0.0, 0.0, 
+    1.0, 0.0,  0.0,  1.0, 0.0,
+    1.0, 1.0,  0.0,  1.0, 1.0, 
+    0.0, 1.0,  0.0,  0.0, 1.0]);
 	return floor;
 }
 
-function makeCeilingCoordColors(zone){
+function makeCeilingVerTex(zone){
 	var floor =  new Float32Array([
     // Vertex coordinates and color(RGBA)
-    0.0, 1.0,  0.0,  0.4,  1.0,  0.4,
-    0.0, 0.0,  0.0,  0.4,  1.0,  0.4, 
-    1.0, 0.0,  0.0,  0.4,  1.0,  0.4,
-    1.0, 1.0,  0.0,  1.0,  0.4,  0.4]);
+    0.0, 0.0,  1.0,  0.0, 1.0, 
+    0.0, 1.0,  1.0,  0.0, 0.0,
+    1.0, 1.0,  1.0,  1.0, 0.0, 
+    1.0, 0.0,  1.0,  1.0, 1.0]);
 	return floor;
 }
 
-function makeWallCoordColors(card,zone){
+function makeWallVerTex(card,zone){
 	var floor =  new Float32Array([
     // Vertex coordinates and color(RGBA)
     0.0, 0.0,  1.0,  0.4,  1.0,  0.4,

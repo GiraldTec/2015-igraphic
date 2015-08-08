@@ -21,16 +21,20 @@
         <script src="dungeonUtils.js"></script> 
 
         <script>
-        document.getElementById('my-file-input').onchange = function(){
-                var file = this.files[0];
 
+        //if (window.File && window.FileReader && window.FileList && window.Blob){
+            document.getElementById('my-file-input').onchange = function(){
+                var file = this.files[0];
                 var reader = new FileReader();
                 reader.onload = function(progressEvent){
                         loadDungeonFile(this.result);
                 };  
 
                 reader.readAsText(file);
-        };
+            };
+        //} else {
+        //  alert('The File APIs are not fully supported by your browser.');
+        //}
         </script>
 </body>
 </html>
