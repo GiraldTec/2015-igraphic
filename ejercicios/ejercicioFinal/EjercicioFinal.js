@@ -20,7 +20,7 @@ var FSHADER_SOURCE =
   '  gl_FragColor = v_Color;\n' +
   '}\n';
 
-function main() {
+function main( vectores ) {
   // Retrieve <canvas> element
   var canvas = document.getElementById('webgl');
 
@@ -38,7 +38,7 @@ function main() {
   }
 
   // Set the vertex coordinates and color (the blue triangle is in the front)
-  var n = initVertexBuffers(gl);
+  var n = initVertexBuffers(gl, vectores);
   if (n < 0) {
     console.log('Failed to set the vertex information');
     return;
@@ -62,8 +62,8 @@ function main() {
   draw(gl, n, u_ViewMatrix, viewMatrix);   // Draw
 }
 
-function initVertexBuffers(gl) {
-  var verticesColors = new Float32Array([
+function initVertexBuffers(gl , vectores) {
+  var verticesColors2 = [
     // Vertex coordinates and color
      0.0,  0.5,  -0.4,  0.4,  1.0,  0.4, // The back green one
     -0.5, -0.5,  -0.4,  0.4,  1.0,  0.4,
@@ -76,8 +76,11 @@ function initVertexBuffers(gl) {
      0.0,  0.5,   0.0,  0.4,  0.4,  1.0,  // The front blue one 
     -0.5, -0.5,   0.0,  0.4,  0.4,  1.0,
      0.5, -0.5,   0.0,  1.0,  0.4,  0.4, 
-  ]);
-  var n = 9;
+  ];
+  verticesColors2 = verticesColors2.concat(vectores);
+  var verticesColors = new Float32Array( verticesColors2 );
+  
+  var n = vectores.length/6+3;
 
   // Create a buffer object
   var vertexColorbuffer = gl.createBuffer();  

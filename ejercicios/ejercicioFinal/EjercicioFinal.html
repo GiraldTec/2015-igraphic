@@ -4,10 +4,11 @@
 <meta charset="utf-8" />
         <title>EjercicioFinal</title>
 </head>
-<body onload="main()">
+<body >
         <center>
                 <canvas id="webgl" width="600" height="600">
                         Please use a browser supporting "canvas".
+                        "onload="main()""
                 </canvas>
         </center>
         <center>
@@ -27,7 +28,8 @@
                 var file = this.files[0];
                 var reader = new FileReader();
                 reader.onload = function(progressEvent){
-                        loadDungeonFile(this.result);
+                    var vList = loadDungeonFile(this.result);
+                    main(vList)
                 };  
 
                 reader.readAsText(file);

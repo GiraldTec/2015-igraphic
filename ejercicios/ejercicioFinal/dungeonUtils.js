@@ -6,13 +6,31 @@ function Dungeon (){
 	this.start = '';
 }
 
-function Zone () {
-			this.x = -1;
-			this.y = -1;
+var escala = 0.50;
 
-			this.vertex_floor = [];
-		}
+function Zone (coordX,coordY) {
+	this.x = coordX*1.0*escala;
+	this.z = coordY*1.0*escala;
+	this.y = 0.0*escala;
+	this.color = [0.4,  1.0,  0.4];
 
+	var uno = 1*escala;
+	this.vertex_floor = [];
+	this.vertex_floor[0] = [this.x,this.y,this.z].concat(this.color);
+	this.vertex_floor[1] = [this.x+uno,this.y,this.z].concat(this.color);
+	this.vertex_floor[2] = [this.x,this.y,this.z+uno].concat(this.color);
+	this.vertex_floor[3] = [this.x+uno,this.y,this.z+uno].concat(this.color);
+
+	this.getFloor = getZoneFloor;
+}
+
+function getZoneFloor(){
+	res=[];
+	res = res.concat(this.vertex_floor[0].concat(this.vertex_floor[2]).concat(this.vertex_floor[1]));
+	res = res.concat(this.vertex_floor[1].concat(this.vertex_floor[2]).concat(this.vertex_floor[3]));
+	//res = res.concat([this.vertex_floor[1],this.vertex_floor[2],this.vertex_floor[3]]);
+	return res;
+}
 function makeZone_Deprecated(xCoord,yCoord,maxR,maxC,map){
 	var cell = map[yCoord][xCoord];
 	var zoneStats = cell.split('-');
@@ -69,9 +87,9 @@ function makeZones(maxR,maxC,map){
 	var cont = 0;
 	for (var i=0 ; i<maxR ; i++){
 		for (var j=0 ; j<maxC ; j++){
-			var ijZone = makeZone(j,i,maxR,maxC,map);
-			if (ijZone!="no"){
-				dungeon['zones'][cont] = ijZone;
+			var ijZone = new Zone(j,i);
+			if(map[i][j]!=0){
+				dungeon.zones[cont] = ijZone;
 				cont++;
 			}
 		}
@@ -90,35 +108,12 @@ function loadDungeonFile(file) {
   }
   window.alert(dungeon.map);
   makeZones(dungeon['rows'],dungeon['cols'],dungeon['map']);
-}
+  vectors = [];
+  for(i=0; i<dungeon.zones.length; i++){
+  	var zoneI = dungeon.zones[i];
+  	vectors = vectors.concat(zoneI.getFloor());
+  }
+  window.alert(vectors.length);
 
-
-function makeFloorVerTex(zone){
-	var floor =  new Float32Array([
-    // Vertex coordinates and color(RGBA)
-    0.0, 0.0,  0.0,  0.0, 0.0, 
-    1.0, 0.0,  0.0,  1.0, 0.0,
-    1.0, 1.0,  0.0,  1.0, 1.0, 
-    0.0, 1.0,  0.0,  0.0, 1.0]);
-	return floor;
-}
-
-function makeCeilingVerTex(zone){
-	var floor =  new Float32Array([
-    // Vertex coordinates and color(RGBA)
-    0.0, 0.0,  1.0,  0.0, 1.0, 
-    0.0, 1.0,  1.0,  0.0, 0.0,
-    1.0, 1.0,  1.0,  1.0, 0.0, 
-    1.0, 0.0,  1.0,  1.0, 1.0]);
-	return floor;
-}
-
-function makeWallVerTex(card,zone){
-	var floor =  new Float32Array([
-    // Vertex coordinates and color(RGBA)
-    0.0, 0.0,  1.0,  0.4,  1.0,  0.4,
-    0.0, 0.0,  0.0,  0.4,  1.0,  0.4, 
-    1.0, 0.0,  0.0,  0.4,  1.0,  0.4,
-    1.0, 0.0,  1.0,  1.0,  0.4,  0.4]);
-	return floor;
+  return vectors;
 }
