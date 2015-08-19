@@ -46,79 +46,31 @@ function main() {
 }
 
 var ANGLE_STEP = 3.0;     // The increments of rotation angle (degrees)
-var g_arm1Angle = 90.0;   // The rotation angle of arm1 (degrees)
+var g_arm1Angle = 0.0;   // The rotation angle of arm1 (degrees)
 var g_joint1Angle = 45.0; // The rotation angle of joint1 (degrees)
 var g_joint2Angle = 0.0;  // The rotation angle of joint2 (degrees)
 var g_joint3Angle = 0.0;  // The rotation angle of joint3 (degrees)
 
-function keydown(ev, gl, n, viewProjMatrix, u_MvpMatrix, u_NormalMatrix) {
-  switch (ev.keyCode) {
-    case 40: // Up arrow key -> the positive rotation of joint1 around the z-axis
-      if (g_joint1Angle < 135.0) g_joint1Angle += ANGLE_STEP;
-      break;
-    case 38: // Down arrow key -> the negative rotation of joint1 around the z-axis
-      if (g_joint1Angle > -135.0) g_joint1Angle -= ANGLE_STEP;
-      break;
-    case 39: // Right arrow key -> the positive rotation of arm1 around the y-axis
-      g_arm1Angle = (g_arm1Angle + ANGLE_STEP) % 360;
-      break;
-    case 37: // Left arrow key -> the negative rotation of arm1 around the y-axis
-      g_arm1Angle = (g_arm1Angle - ANGLE_STEP) % 360;
-      break;
-    case 90: // 'ｚ'key -> the positive rotation of joint2
-      g_joint2Angle = (g_joint2Angle + ANGLE_STEP) % 360;
-      break; 
-    case 88: // 'x'key -> the negative rotation of joint2
-      g_joint2Angle = (g_joint2Angle - ANGLE_STEP) % 360;
-      break;
-    case 86: // 'v'key -> the positive rotation of joint3
-      if (g_joint3Angle < 60.0)  g_joint3Angle = (g_joint3Angle + ANGLE_STEP) % 360;
-      break;
-    case 67: // 'c'key -> the nagative rotation of joint3
-      if (g_joint3Angle > -60.0) g_joint3Angle = (g_joint3Angle - ANGLE_STEP) % 360;
-      break;
-    default: return; // Skip drawing at no effective action
-  }
-  // Draw the robot arm
-  draw(gl, n, viewProjMatrix, u_MvpMatrix, u_NormalMatrix);
-}
 
 function initVertexBuffers(gl) {
-  // Coordinates（Cube which length of one side is 1 with the origin on the center of the bottom)
-  var vertices = new Float32Array([
-    0.5, 1.0, 0.5, -0.5, 1.0, 0.5, -0.5, 0.0, 0.5,  0.5, 0.0, 0.5 // v0-v1-v2-v3 front
-//    0.5, 1.0, 0.5,  0.5, 0.0, 0.5,  0.5, 0.0,-0.5,  0.5, 1.0,-0.5, // v0-v3-v4-v5 right
-//    0.5, 1.0, 0.5,  0.5, 1.0,-0.5, -0.5, 1.0,-0.5, -0.5, 1.0, 0.5, // v0-v5-v6-v1 up
-//   -0.5, 1.0, 0.5, -0.5, 1.0,-0.5, -0.5, 0.0,-0.5, -0.5, 0.0, 0.5, // v1-v6-v7-v2 left
-//   -0.5, 0.0,-0.5,  0.5, 0.0,-0.5,  0.5, 0.0, 0.5, -0.5, 0.0, 0.5, // v7-v4-v3-v2 down
-//    0.5, 0.0,-0.5, -0.5, 0.0,-0.5, -0.5, 1.0,-0.5,  0.5, 1.0,-0.5  // v4-v7-v6-v5 back
-  ]);
 
-  // Normal
-  var normals = new Float32Array([
-    0.0, 0.0, 1.0,  0.0, 0.0, 1.0,  0.0, 0.0, 1.0,  0.0, 0.0, 1.0 // v0-v1-v2-v3 front
-//    1.0, 0.0, 0.0,  1.0, 0.0, 0.0,  1.0, 0.0, 0.0,  1.0, 0.0, 0.0, // v0-v3-v4-v5 right
-//    0.0, 1.0, 0.0,  0.0, 1.0, 0.0,  0.0, 1.0, 0.0,  0.0, 1.0, 0.0, // v0-v5-v6-v1 up
-//   -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, // v1-v6-v7-v2 left
-//    0.0,-1.0, 0.0,  0.0,-1.0, 0.0,  0.0,-1.0, 0.0,  0.0,-1.0, 0.0, // v7-v4-v3-v2 down
-//    0.0, 0.0,-1.0,  0.0, 0.0,-1.0,  0.0, 0.0,-1.0,  0.0, 0.0,-1.0  // v4-v7-v6-v5 back
-  ]);
+  var miCara = new Cara(1);
+  miCara.construye();
 
-  // Indices of the vertices
-  var indices = new Uint8Array([
-     0, 1, 2,   0, 2, 3    // front
-//     4, 5, 6,   4, 6, 7,    // right
-//     8, 9,10,   8,10,11,    // up
-//    12,13,14,  12,14,15,    // left
-//    16,17,18,  16,18,19,    // down
-//    20,21,22,  20,22,23     // back
-  ]);
+  var miCubo = new Cubo(2);
+  miCubo.construye();
+
+  var vertices = new Float32Array(miCubo.puntos);
+  var normals = new Float32Array(miCubo.normales);
+  var colores = new Float32Array(miCubo.colores);
+  var indices = new Uint8Array(miCubo.indices);
 
   // Write the vertex property to buffers (coordinates and normals)
   if (!initArrayBuffer(gl, 'a_Position', vertices, gl.FLOAT, 3)) return -1;
   if (!initArrayBuffer(gl, 'a_Normal', normals, gl.FLOAT, 3)) return -1;
+  if (!initArrayBuffer(gl, 'a_Color', colores, gl.FLOAT, 4)) return -1;
 
-  // Unbind the buffer object
+   // Unbind the buffer object
   gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
   // Write the indices to the buffer object
@@ -169,38 +121,38 @@ function draw(gl, n, viewProjMatrix, u_MvpMatrix, u_NormalMatrix) {
   g_modelMatrix.setTranslate(0.0, -12.0, 0.0);
   drawBox(gl, n, 10.0, baseHeight, 10.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix);
  
-  // Arm1
+//  // Arm1
   var arm1Length = 10.0;
   g_modelMatrix.translate(0.0, baseHeight, 0.0);     // Move onto the base
   g_modelMatrix.rotate(g_arm1Angle, 0.0, 1.0, 0.0);  // Rotate around the y-axis
   drawBox(gl, n, 3.0, arm1Length, 3.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix); // Draw
-
-  // Arm2
-  var arm2Length = 10.0;
-  g_modelMatrix.translate(0.0, arm1Length, 0.0);       // Move to joint1
-  g_modelMatrix.rotate(g_joint1Angle, 0.0, 0.0, 1.0);  // Rotate around the z-axis
-  drawBox(gl, n, 4.0, arm2Length, 4.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix); // Draw
-
-  // A palm
-  var palmLength = 2.0;
-  g_modelMatrix.translate(0.0, arm2Length, 0.0);       // Move to palm
-  g_modelMatrix.rotate(g_joint2Angle, 0.0, 1.0, 0.0);  // Rotate around the y-axis
-  drawBox(gl, n, 2.0, palmLength, 6.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix);  // Draw
-
-  // Move to the center of the tip of the palm
-  g_modelMatrix.translate(0.0, palmLength, 0.0);
-
-  // Draw finger1
-  pushMatrix(g_modelMatrix);
-    g_modelMatrix.translate(0.0, 0.0, 2.0);
-    g_modelMatrix.rotate(g_joint3Angle, 1.0, 0.0, 0.0);  // Rotate around the x-axis
-    drawBox(gl, n, 1.0, 2.0, 1.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix);
-  g_modelMatrix = popMatrix();
-
-  // Draw finger2
-  g_modelMatrix.translate(0.0, 0.0, -2.0);
-  g_modelMatrix.rotate(-g_joint3Angle, 1.0, 0.0, 0.0);  // Rotate around the x-axis
-  drawBox(gl, n, 1.0, 2.0, 1.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix);
+//
+//  // Arm2
+//  var arm2Length = 10.0;
+//  g_modelMatrix.translate(0.0, arm1Length, 0.0);       // Move to joint1
+//  g_modelMatrix.rotate(g_joint1Angle, 0.0, 0.0, 1.0);  // Rotate around the z-axis
+//  drawBox(gl, n, 4.0, arm2Length, 4.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix); // Draw
+//
+//  // A palm
+//  var palmLength = 2.0;
+//  g_modelMatrix.translate(0.0, arm2Length, 0.0);       // Move to palm
+//  g_modelMatrix.rotate(g_joint2Angle, 0.0, 1.0, 0.0);  // Rotate around the y-axis
+//  drawBox(gl, n, 2.0, palmLength, 6.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix);  // Draw
+//
+//  // Move to the center of the tip of the palm
+//  g_modelMatrix.translate(0.0, palmLength, 0.0);
+//
+//  // Draw finger1
+//  pushMatrix(g_modelMatrix);
+//    g_modelMatrix.translate(0.0, 0.0, 2.0);
+//    g_modelMatrix.rotate(g_joint3Angle, 1.0, 0.0, 0.0);  // Rotate around the x-axis
+//    drawBox(gl, n, 1.0, 2.0, 1.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix);
+//  g_modelMatrix = popMatrix();
+//
+//  // Draw finger2
+//  g_modelMatrix.translate(0.0, 0.0, -2.0);
+//  g_modelMatrix.rotate(-g_joint3Angle, 1.0, 0.0, 0.0);  // Rotate around the x-axis
+//  drawBox(gl, n, 1.0, 2.0, 1.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix);
 }
 
 var g_matrixStack = []; // Array for storing a matrix
