@@ -54,16 +54,19 @@ var g_joint3Angle = 0.0;  // The rotation angle of joint3 (degrees)
 
 function initVertexBuffers(gl) {
 
-  var miTrian = new Triangulo();
-  miTrian.construye();
+  var miCirc = new Circulo(14);
+  miCirc.construye();
 
-  var miCubo = new Cubo(2);
-  miCubo.construye();
+//  var miTrian = new Triangulo();
+//  miTrian.construye();
 
-  var vertices = new Float32Array(miTrian.puntos);
-  var normals = new Float32Array(miTrian.normales);
-  var colores = new Float32Array(miTrian.colores);
-  var indices = new Uint8Array(miTrian.indices);
+//  var miCubo = new Cubo(2);
+//  miCubo.construye();
+
+  var vertices = new Float32Array(miCirc.puntos);
+  var normals = new Float32Array(miCirc.normales);
+  var colores = new Float32Array(miCirc.colores);
+  var indices = new Uint8Array(miCirc.indices);
 
   // Write the vertex property to buffers (coordinates and normals)
   if (!initArrayBuffer(gl, 'a_Position', vertices, gl.FLOAT, 3)) return -1;
