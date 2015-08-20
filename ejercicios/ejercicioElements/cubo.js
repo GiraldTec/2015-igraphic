@@ -8,35 +8,36 @@ function Cubo (div) {
   this.construye = function() {
   	// Hay que hacer las distintas caras del cubo juntando varias caras 
   	// (es mejor, aunque sobrarían algunos puntos)
-  	var cara_aux = new Cara(this.divisiones);
+  	var cara_aux = new Cuadrado(this.divisiones);
   	cara_aux.construye();
 
   	var pnc_totales = 0; // indices de los puntos / normales / colores del CUBO
   	var i_totales = 0; // 
 
-  	for (var iCara=0 ; iCara < 2 ; iCara++){
+  	for (var iCara=0 ; iCara < 6 ; iCara++){
   		var m_aux = new Matrix4();
 			switch(iCara) {
-				case 1:
+				case 0:
+					m_aux.translate(0.0, 0.5, 0.5);
+			  	break;
+			  case 1:
 					m_aux.setRotate(90, 0, 1, 0);
+					m_aux.translate(0.0, 0.5, 0.5);
 			  	break;
 			  case 2:
 			  	m_aux.setRotate(180, 0, 1, 0);
+			  	m_aux.translate(0.0, 0.5, 0.5);
 			  	break;
 			  case 3:
 			  	m_aux.setRotate(270, 0, 1, 0);
+			  	m_aux.translate(0.0, 0.5, 0.5);
 			  	break;
-			  case 0:  // tapa superior
-			  	m_aux.translate(0.0, 0.5, 0.0);
+			  case 4:  // tapa superior
 			  	m_aux.rotate(-90, 1, 0, 0);
-
-			  	//m_aux.translate(0, 0, 0);
-			  	
-			  	
+			  	m_aux.translate(0.0, 0.0, 1.0);
 			  	break;
-			  case 5:
-			  	m_aux.setRotate(270, 1, 0, 0);
-			  	m_aux.translate(1.0, 0.5, -0.5);
+			  case 5: //tapa inferior
+			  	m_aux.rotate(90, 1, 0, 0);
 			  	break;
 			}
 
@@ -45,22 +46,23 @@ function Cubo (div) {
 
 			//// Agregamos los puntos/normales/colores de una cara a los totales del cubo
 			for( var i = 0 ; i < sq_divisiones ; i++){
-				var p_aux = new Vector3();
+				var p_aux = new Vector4();
 				//[cara_aux.puntos[3*i],cara_aux.puntos[3*i+1],cara_aux.puntos[3*i+2]]
 				p_aux.elements[0] = cara_aux.puntos[3*i];
 				p_aux.elements[1] = cara_aux.puntos[3*i+1];
 				p_aux.elements[2] = cara_aux.puntos[3*i+2];
+				p_aux.elements[3] = 1.0;
 
-				var punto = m_aux.multiplyVector3(p_aux);
+				var punto = m_aux.multiplyVector4(p_aux);
 
 				//[cara_aux.normales[3*i],	cara_aux.normales[3*i+1], cara_aux.normales[3*i+2]]
-				var n_aux = new Vector3();
+				var n_aux = new Vector4();
 				n_aux.elements[0] = cara_aux.normales[3*i];
 				n_aux.elements[1] = cara_aux.normales[3*i+1];
 				n_aux.elements[2] = cara_aux.normales[3*i+2];
+				n_aux.elements[3] = 0.0;
 
-
-				var normal = m_aux.multiplyVector3(n_aux);
+				var normal = m_aux.multiplyVector4(n_aux);
 				
 				var punto_elms = punto.elements;
 				var normal_elms = normal.elements;

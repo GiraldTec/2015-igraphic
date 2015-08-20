@@ -1,4 +1,4 @@
-function Cara (div) {
+function Cuadrado (div) {
   this.puntos = [];			//	Float32Array
   this.normales = [];
   this.colores = [];		//	Float32Array
@@ -7,14 +7,15 @@ function Cara (div) {
 
   this.construye = function() {
   	var x_orig = -0.5;
-  	var y_orig = 1.0;
+  	var y_orig = 0.5;
+  	var z_orig = 0.0;
 		for (var i=0 ; i<=this.divisiones ; i++){ // filas
 			for (var j=0 ; j<=this.divisiones ; j++){ // columnas
 				// crear el punto
 				var ind = i*(this.divisiones+1) + j;
 				this.puntos[ind*3] =  x_orig + i * ( 1/this.divisiones) ;
 				this.puntos[ind*3+1] = y_orig - j * ( 1/this.divisiones) ;
-				this.puntos[ind*3+2] = 0.5;
+				this.puntos[ind*3+2] = z_orig;
 
 				this.normales[ind*3] = 0.0;
 				this.normales[ind*3+1] = 0.0;
