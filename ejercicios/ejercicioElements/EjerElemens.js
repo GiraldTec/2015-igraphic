@@ -1,3 +1,6 @@
+var OFFSCREEN_WIDTH = 2048, OFFSCREEN_HEIGHT = 2048;
+var LIGHT_X = 0, LIGHT_Y = 7, LIGHT_Z = 2; // Position of the light source
+
 function main() {
   // Retrieve <canvas> element
   var canvas = document.getElementById('webgl');
