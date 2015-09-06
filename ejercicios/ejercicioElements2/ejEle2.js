@@ -196,7 +196,7 @@ function initVertexBuffersForTriangle(gl) {
   //  v0----v1
 
 
-  var miCirc = new Circulo(5);
+  var miCirc = new Cubo(7);
   miCirc.construye();
 
   var vertices = new Float32Array(miCirc.puntos);

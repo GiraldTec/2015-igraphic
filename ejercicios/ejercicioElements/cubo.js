@@ -17,28 +17,28 @@ function Cubo (div) {
   	for (var iCara=0 ; iCara < 6 ; iCara++){
   		var m_aux = new Matrix4();
 			switch(iCara) {
-				case 0:
-					m_aux.translate(0.0, 0.5, 0.5);
-			  	break;
-			  case 1:
-					m_aux.setRotate(90, 0, 1, 0);
-					m_aux.translate(0.0, 0.5, 0.5);
-			  	break;
-			  case 2:
-			  	m_aux.setRotate(180, 0, 1, 0);
-			  	m_aux.translate(0.0, 0.5, 0.5);
-			  	break;
-			  case 3:
-			  	m_aux.setRotate(270, 0, 1, 0);
-			  	m_aux.translate(0.0, 0.5, 0.5);
-			  	break;
-			  case 4:  // tapa superior
-			  	m_aux.rotate(-90, 1, 0, 0);
-			  	m_aux.translate(0.0, 0.0, 1.0);
-			  	break;
-			  case 5: //tapa inferior
-			  	m_aux.rotate(90, 1, 0, 0);
-			  	break;
+			case 0:
+				m_aux.translate(0.0, 0.5, 0.5);
+			break;
+			case 1:
+				m_aux.setRotate(90, 0, 1, 0);
+				m_aux.translate(0.0, 0.5, 0.5);
+			break;
+			case 2:
+				m_aux.setRotate(180, 0, 1, 0);
+				m_aux.translate(0.0, 0.5, 0.5);
+			break;
+			case 3:
+				m_aux.setRotate(270, 0, 1, 0);
+				m_aux.translate(0.0, 0.5, 0.5);
+			break;
+			case 4:  // tapa superior
+				m_aux.rotate(-90, 1, 0, 0);
+				m_aux.translate(0.0, 0.0, 1.0);
+			break;
+			case 5: //tapa inferior
+				m_aux.rotate(90, 1, 0, 0);
+			break;
 			}
 
 			var sq_divisiones = (this.divisiones+1) * (this.divisiones+1);
