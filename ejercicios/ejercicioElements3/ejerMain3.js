@@ -99,7 +99,7 @@ function initVertexBuffersForCube(gl) {
   //  v2------v3
 
 
-  var miCub = new Cubo(2);
+  var miCub = new Cubo(3);
   miCub.construye();
 
   var vertices = new Float32Array(miCub.puntos);
@@ -291,7 +291,7 @@ function initFramebufferObject(gl) {
 
   return framebuffer;
 }
-function draw(gl, canvas, fbo, plane, cube, angle, viewProjMatrix, viewProjMatrixFBO, t_prog, s_prog) {
+function draw(gl, canvas, fbo, plane, cube, angle, viewProjMatrix, viewProjMatrixFBO, t_prog, s_prog, u_NormalMatrix) {
   gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);              // Change the drawing destination to FBO
   gl.viewport(0, 0, OFFSCREEN_WIDTH, OFFSCREEN_HEIGHT); // Set a viewport for FBO
 
@@ -299,7 +299,7 @@ function draw(gl, canvas, fbo, plane, cube, angle, viewProjMatrix, viewProjMatri
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);  // Clear FBO
 
   gl.useProgram(s_prog);
-  drawSolidCube(gl, s_prog, cube, angle, viewProjMatrixFBO);   // Draw the cube
+  drawSolidCube(gl, s_prog, cube, angle, viewProjMatrixFBO, u_NormalMatrix);   // Draw the cube
 
   gl.bindFramebuffer(gl.FRAMEBUFFER, null);        // Change the drawing destination to color buffer
   gl.viewport(0, 0, canvas.width, canvas.height);  // Set the size of viewport back to that of <canvas>
@@ -314,8 +314,10 @@ function draw(gl, canvas, fbo, plane, cube, angle, viewProjMatrix, viewProjMatri
 // Coordinate transformation matrix
 var g_modelMatrix = new Matrix4();
 var g_mvpMatrix = new Matrix4();
+var g_normalMatrix = new Matrix4();  // Coordinate transformation matrix for normals
 
-function drawSolidCube(gl, program, o, angle, viewProjMatrix) {
+
+function drawSolidCube(gl, program, o, angle, viewProjMatrix, u_NormalMatrix) {
   // Calculate a model matrix
   g_modelMatrix.setRotate(20.0, 1.0, 0.0, 0.0);
   g_modelMatrix.rotate(angle, 0.0, 1.0, 0.0);
@@ -324,6 +326,10 @@ function drawSolidCube(gl, program, o, angle, viewProjMatrix) {
   g_mvpMatrix.set(viewProjMatrix);
   g_mvpMatrix.multiply(g_modelMatrix);
   gl.uniformMatrix4fv(program.u_MvpMatrix, false, g_mvpMatrix.elements);
+
+  g_normalMatrix.setInverseOf(g_modelMatrix);
+  g_normalMatrix.transpose();
+  gl.uniformMatrix4fv(u_NormalMatrix, false, g_normalMatrix.elements);
 
   //drawTexturedObject(gl, program, o, texture);
   drawSolidObject(gl, program, o);

@@ -57,14 +57,14 @@ var g_joint3Angle = 0.0;  // The rotation angle of joint3 (degrees)
 
 function initVertexBuffers(gl) {
 
-  var miCirc = new Circulo(14);
-  miCirc.construye();
+ // var miCirc = new Circulo(14);
+ // miCirc.construye();
 
 //  var miTrian = new Triangulo();
 //  miTrian.construye();
 
-//  var miCubo = new Cubo(2);
-//  miCubo.construye();
+  var miCirc = new Cubo(8);
+  miCirc.construye();
 
   var vertices = new Float32Array(miCirc.puntos);
   var normals = new Float32Array(miCirc.normales);
@@ -128,37 +128,37 @@ function draw(gl, n, viewProjMatrix, u_MvpMatrix, u_NormalMatrix) {
   drawBox(gl, n, 10.0, baseHeight, 10.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix);
  
 //  // Arm1
-  var arm1Length = 10.0;
-  g_modelMatrix.translate(0.0, baseHeight, 0.0);     // Move onto the base
-  g_modelMatrix.rotate(g_arm1Angle, 0.0, 1.0, 0.0);  // Rotate around the y-axis
-  drawBox(gl, n, 3.0, arm1Length, 3.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix); // Draw
-
-  // Arm2
-  var arm2Length = 10.0;
-  g_modelMatrix.translate(0.0, arm1Length, 0.0);       // Move to joint1
-  g_modelMatrix.rotate(g_joint1Angle, 0.0, 0.0, 1.0);  // Rotate around the z-axis
-  drawBox(gl, n, 4.0, arm2Length, 4.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix); // Draw
-
-  // A palm
-  var palmLength = 2.0;
-  g_modelMatrix.translate(0.0, arm2Length, 0.0);       // Move to palm
-  g_modelMatrix.rotate(g_joint2Angle, 0.0, 1.0, 0.0);  // Rotate around the y-axis
-  drawBox(gl, n, 2.0, palmLength, 6.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix);  // Draw
-
-  // Move to the center of the tip of the palm
-  g_modelMatrix.translate(0.0, palmLength, 0.0);
-
-  // Draw finger1
-  pushMatrix(g_modelMatrix);
-    g_modelMatrix.translate(0.0, 0.0, 2.0);
-    g_modelMatrix.rotate(g_joint3Angle, 1.0, 0.0, 0.0);  // Rotate around the x-axis
-    drawBox(gl, n, 1.0, 2.0, 1.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix);
-  g_modelMatrix = popMatrix();
-
-  // Draw finger2
-  g_modelMatrix.translate(0.0, 0.0, -2.0);
-  g_modelMatrix.rotate(-g_joint3Angle, 1.0, 0.0, 0.0);  // Rotate around the x-axis
-  drawBox(gl, n, 1.0, 2.0, 1.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix);
+//  var arm1Length = 10.0;
+//  g_modelMatrix.translate(0.0, baseHeight, 0.0);     // Move onto the base
+//  g_modelMatrix.rotate(g_arm1Angle, 0.0, 1.0, 0.0);  // Rotate around the y-axis
+//  drawBox(gl, n, 3.0, arm1Length, 3.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix); // Draw
+//
+//  // Arm2
+//  var arm2Length = 10.0;
+//  g_modelMatrix.translate(0.0, arm1Length, 0.0);       // Move to joint1
+//  g_modelMatrix.rotate(g_joint1Angle, 0.0, 0.0, 1.0);  // Rotate around the z-axis
+//  drawBox(gl, n, 4.0, arm2Length, 4.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix); // Draw
+//
+//  // A palm
+//  var palmLength = 2.0;
+//  g_modelMatrix.translate(0.0, arm2Length, 0.0);       // Move to palm
+//  g_modelMatrix.rotate(g_joint2Angle, 0.0, 1.0, 0.0);  // Rotate around the y-axis
+//  drawBox(gl, n, 2.0, palmLength, 6.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix);  // Draw
+//
+//  // Move to the center of the tip of the palm
+//  g_modelMatrix.translate(0.0, palmLength, 0.0);
+//
+//  // Draw finger1
+//  pushMatrix(g_modelMatrix);
+//    g_modelMatrix.translate(0.0, 0.0, 2.0);
+//    g_modelMatrix.rotate(g_joint3Angle, 1.0, 0.0, 0.0);  // Rotate around the x-axis
+//    drawBox(gl, n, 1.0, 2.0, 1.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix);
+//  g_modelMatrix = popMatrix();
+//
+//  // Draw finger2
+//  g_modelMatrix.translate(0.0, 0.0, -2.0);
+//  g_modelMatrix.rotate(-g_joint3Angle, 1.0, 0.0, 0.0);  // Rotate around the x-axis
+//  drawBox(gl, n, 1.0, 2.0, 1.0, viewProjMatrix, u_MvpMatrix, u_NormalMatrix);
 }
 
 var g_matrixStack = []; // Array for storing a matrix
@@ -187,6 +187,6 @@ function drawBox(gl, n, width, height, depth, viewProjMatrix, u_MvpMatrix, u_Nor
     g_normalMatrix.transpose();
     gl.uniformMatrix4fv(u_NormalMatrix, false, g_normalMatrix.elements);
     // Draw
-    gl.drawElements(gl.TRIANGLES, n, gl.UNSIGNED_BYTE, 0);
+    gl.drawElements(gl.LINES, n, gl.UNSIGNED_BYTE, 0);
   g_modelMatrix = popMatrix();   // Retrieve the model matrix
 }

@@ -14,7 +14,7 @@ function Cubo (div) {
   	var pnc_totales = 0; // indices de los puntos / normales / colores del CUBO
   	var i_totales = 0; // 
 
-  	for (var iCara=0 ; iCara < 2 ; iCara++){
+  	for (var iCara=0 ; iCara < 6 ; iCara++){
   		var m_aux = new Matrix4();
 			switch(iCara) {
 				case 0:
