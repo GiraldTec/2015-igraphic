@@ -74,7 +74,16 @@ function initVertexBuffers(gl) {
   // Write the vertex property to buffers (coordinates and normals)
   if (!initArrayBuffer(gl, 'a_Position', vertices, gl.FLOAT, 3)) return -1;
   if (!initArrayBuffer(gl, 'a_Normal', normals, gl.FLOAT, 3)) return -1;
-  if (!initArrayBuffer(gl, 'a_Color', colores, gl.FLOAT, 4)) return -1;
+
+  // Pass the rotation matrix to the vertex shader
+  var u_color = gl.getUniformLocation(gl.program, 'u_color');
+  if (u_color < 0) {
+      console.log('Failed to get the storage location of u_color');
+      return;
+  }
+
+ // if (!initArrayBuffer(gl, 'a_Color', colores, gl.FLOAT, 4)) return -1;
+  gl.uniform4f(u_color, 1.0, 0.4, 0.0, 1.0);
 
    // Unbind the buffer object
   gl.bindBuffer(gl.ARRAY_BUFFER, null);

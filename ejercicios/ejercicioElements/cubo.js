@@ -62,10 +62,13 @@ function Cubo (div) {
 				n_aux.elements[2] = cara_aux.normales[3*i+2];
 				n_aux.elements[3] = 0.0;
 
-				var normal = m_aux.multiplyVector4(n_aux);
+				var normal = m_aux.multiplyVector4(n_aux);  
+
+				var normalV3 = new Vector3(normal.elements);
+				normalV3 = normalV3.normalize();
 				
 				var punto_elms = punto.elements;
-				var normal_elms = normal.elements;
+				var normal_elms = normalV3.elements;
 
 				this.puntos[pnc_totales*3] = punto_elms[0];
 				this.puntos[pnc_totales*3+1] = punto_elms[1];

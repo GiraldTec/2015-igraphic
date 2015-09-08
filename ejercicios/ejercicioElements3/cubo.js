@@ -14,31 +14,31 @@ function Cubo (div) {
   	var pnc_totales = 0; // indices de los puntos / normales / colores del CUBO
   	var i_totales = 0; // 
 
-  	for (var iCara=0 ; iCara < 2 ; iCara++){
+  	for (var iCara=0 ; iCara < 6 ; iCara++){
   		var m_aux = new Matrix4();
 			switch(iCara) {
-				case 0:
-					m_aux.translate(0.0, 0.5, 0.5);
-			  	break;
-			  case 1:
-					m_aux.setRotate(90, 0, 1, 0);
-					m_aux.translate(0.0, 0.5, 0.5);
-			  	break;
-			  case 2:
-			  	m_aux.setRotate(180, 0, 1, 0);
-			  	m_aux.translate(0.0, 0.5, 0.5);
-			  	break;
-			  case 3:
-			  	m_aux.setRotate(270, 0, 1, 0);
-			  	m_aux.translate(0.0, 0.5, 0.5);
-			  	break;
-			  case 4:  // tapa superior
-			  	m_aux.rotate(-90, 1, 0, 0);
-			  	m_aux.translate(0.0, 0.0, 1.0);
-			  	break;
-			  case 5: //tapa inferior
-			  	m_aux.rotate(90, 1, 0, 0);
-			  	break;
+			case 0:
+				m_aux.translate(0.0, 0.5, 0.5);
+			break;
+			case 1:
+				m_aux.setRotate(90, 0, 1, 0);
+				m_aux.translate(0.0, 0.5, 0.5);
+			break;
+			case 2:
+				m_aux.setRotate(180, 0, 1, 0);
+				m_aux.translate(0.0, 0.5, 0.5);
+			break;
+			case 3:
+				m_aux.setRotate(270, 0, 1, 0);
+				m_aux.translate(0.0, 0.5, 0.5);
+			break;
+			case 4:  // tapa superior
+				m_aux.rotate(-90, 1, 0, 0);
+				m_aux.translate(0.0, 0.0, 1.0);
+			break;
+			case 5: //tapa inferior
+				m_aux.rotate(90, 1, 0, 0);
+			break;
 			}
 
 			var sq_divisiones = (this.divisiones+1) * (this.divisiones+1);
@@ -62,10 +62,13 @@ function Cubo (div) {
 				n_aux.elements[2] = cara_aux.normales[3*i+2];
 				n_aux.elements[3] = 0.0;
 
-				var normal = m_aux.multiplyVector4(n_aux);
+				var normal = m_aux.multiplyVector4(n_aux);  
+
+				var normalV3 = new Vector3(normal.elements);
+				normalV3 = normalV3.normalize();
 				
 				var punto_elms = punto.elements;
-				var normal_elms = normal.elements;
+				var normal_elms = normalV3.elements;
 
 				this.puntos[pnc_totales*3] = punto_elms[0];
 				this.puntos[pnc_totales*3+1] = punto_elms[1];
