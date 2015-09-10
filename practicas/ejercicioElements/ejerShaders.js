@@ -5,6 +5,7 @@ var VSHADER_SOURCE =
   'attribute vec4 a_Normal;\n' +
   'uniform vec4 u_color;\n' +
   'uniform mat4 u_MvpMatrix;\n' +
+  'uniform mat4 u_ModelMatrix;\n' +   // Model matrix
   'uniform mat4 u_NormalMatrix;\n' +
   'varying vec4 v_Color;\n' +
   'void main() {\n' +
