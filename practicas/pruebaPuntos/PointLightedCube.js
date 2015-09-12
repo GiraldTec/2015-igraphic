@@ -117,7 +117,7 @@ function main() {
   var currentAngle = 0.0;
 
   var tick = function() {
-  currentAngle = currentAngle + 2.0;  // Update current rotation angle
+  currentAngle = currentAngle + 0.2;  // Update current rotation angle
   camara.dibujar(modelMatrix,n,currentAngle);
   window.requestAnimationFrame(tick, canvas);
   };

@@ -21,15 +21,15 @@ function Cubo (div) {
 				m_aux.translate(0.0, 0.5, 0.5);
 			break;
 			case 1:
-				m_aux.setRotate(90, 0, 1, 0);
+				m_aux.rotate(90, 0, 1, 0);
 				m_aux.translate(0.0, 0.5, 0.5);
 			break;
 			case 2:
-				m_aux.setRotate(180, 0, 1, 0);
+				m_aux.rotate(180, 0, 1, 0);
 				m_aux.translate(0.0, 0.5, 0.5);
 			break;
 			case 3:
-				m_aux.setRotate(270, 0, 1, 0);
+				m_aux.rotate(270, 0, 1, 0);
 				m_aux.translate(0.0, 0.5, 0.5);
 			break;
 			case 4:  // tapa superior

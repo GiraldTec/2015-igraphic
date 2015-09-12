@@ -1,4 +1,4 @@
-var OFFSCREEN_WIDTH = 2048, OFFSCREEN_HEIGHT = 2048;
+var OFFSCREEN_WIDTH = 128, OFFSCREEN_HEIGHT = 128;
 var LIGHT_X = 0, LIGHT_Y = 7, LIGHT_Z = 2; // Position of the light source
 
 function main() {
@@ -48,12 +48,14 @@ function main() {
     console.log('Failed to initialize frame buffer object');
     return;
   }
-  gl.activeTexture(gl.TEXTURE0); // Set a texture object to the texture unit
-  gl.bindTexture(gl.TEXTURE_2D, fbo.texture);
-
   // Set the clear color and enable the depth test
   gl.clearColor(0, 0, 0, 1);
   gl.enable(gl.DEPTH_TEST);
+
+  gl.activeTexture(gl.TEXTURE0); // Set a texture object to the texture unit
+  gl.bindTexture(gl.TEXTURE_2D, fbo.texture);
+
+
 
   var viewProjMatrixFromLight = new Matrix4(); // Prepare a view projection matrix for generating a shadow map
   viewProjMatrixFromLight.setPerspective(70.0, OFFSCREEN_WIDTH/OFFSCREEN_HEIGHT, 1.0, 100.0);
@@ -196,7 +198,7 @@ function initVertexBuffersForTriangle(gl) {
   //  v0----v1
 
 
-  var miCirc = new Cubo(7);
+  var miCirc = new Cubo(3);
   miCirc.construye();
 
   var vertices = new Float32Array(miCirc.puntos);
