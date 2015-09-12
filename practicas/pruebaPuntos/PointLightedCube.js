@@ -76,7 +76,7 @@ function main() {
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
   gl.enable(gl.DEPTH_TEST);
 
-  var camara = new Camara(gl);
+  var camara = new Camara(gl,canvas.width/canvas.height);
 
   // Get the storage locations of uniform variables and so on
   var u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
@@ -111,10 +111,17 @@ function main() {
   gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
 
   // Pass the model view projection matrix to u_MvpMatrix
-  camara.inicializar(canvas.width/canvas.height);//mvpMatrix.setPerspective(30, canvas.width/canvas.height, 1, 100);
+  camara.calcular();//mvpMatrix.setPerspective(30, canvas.width/canvas.height, 1, 100);
   //mvpMatrix.lookAt(6, 6, 14, 0, 0, 0, 0, 1, 0);
   
-  camara.dibujar(modelMatrix,n);
+  var currentAngle = 0.0;
+
+  var tick = function() {
+  currentAngle = currentAngle + 2.0;  // Update current rotation angle
+  camara.dibujar(modelMatrix,n,currentAngle);
+  window.requestAnimationFrame(tick, canvas);
+  };
+  tick();
 
 }
 
@@ -168,3 +175,6 @@ function initArrayBuffer(gl, attribute, data, num, type) {
 
   return true;
 }
+
+
+
