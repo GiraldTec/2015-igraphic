@@ -33,14 +33,29 @@ function habitacion_01(habitacion, gl, canvas){
 
 
 
-  var circ = new FiguraCirculo(6, [0,1,0])
+  var circ = new FiguraCirculo(6, [0,1,0,1])
   circ.construye(gl);
   circ.escala(7,7,1);
 	circ.desplaza(0,0,5);
 
+	var cuad = new FiguraCuadrado(6, [0,1,0,1])
+  cuad.construye(gl);
+  cuad.escala(7,7,1);
+
+  var torus = new FiguraTorus(19, 6, 5, 1, [0,1,0,1]);
+  torus.construye(gl);
+  torus.desplaza(0,0,-7);
+  torus.rota(90, 1,0,0);
+
+  var cuad = new FiguraCuadrado(6, [0,1,0,1])
+  cuad.construye(gl);
+  cuad.escala(7,7,1);
+  
 	habitacion.add_elemento(cubC);
 	habitacion.add_elemento(ann);
 	habitacion.add_elemento(circ);
+	habitacion.add_elemento(cuad);
+	habitacion.add_elemento(torus);
 
 
 	habitacion.set_camara(new Camara(gl, canvas.width/canvas.height, 40, 40, 10 , 1, 100))

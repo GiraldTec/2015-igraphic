@@ -119,7 +119,7 @@ function MallaTorus (div1, div2, rat1, rat2) {
 	 	//camara.canvas.clear(camara.canvas.COLOR_BUFFER_BIT | camara.canvas.DEPTH_BUFFER_BIT);
 
 	  // Draw the cube
-	  camara.canvas.drawElements(camara.canvas.LINES, this.indices.length, camara.canvas.UNSIGNED_BYTE, 0);
+	  camara.canvas.drawElements(camara.canvas.TRIANGLES, this.indices.length, camara.canvas.UNSIGNED_BYTE, 0);
 
   }
 

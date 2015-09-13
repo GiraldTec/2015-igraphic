@@ -4,8 +4,7 @@ function FiguraTubo (div, rat1, rat2, color) {
 
   this.cara_m = new MallaTubo(div, rat1, rat2, 1.5, 0);
 
-  this.colorRGB = color;    
-  this.matricesCaras = [];
+  this.colorRGB = color;   
   this.matrizPropia = new Matrix4();
 
   this.divisiones = div;  
@@ -26,52 +25,20 @@ function FiguraTubo (div, rat1, rat2, color) {
     // Hay que hacer las distintas caras del cubo juntando varias caras 
     // (es mejor, aunque sobrarían algunos puntos)
     this.cara_m.construye(gl);
-
-    for (var iCara=0 ; iCara < 6 ; iCara++){
-      var m_aux = new Matrix4();
-
-      switch(iCara) {
-        case 0:
-          m_aux.translate(0.0, 0.5, 0.5);
-        break;
-        case 1:
-          m_aux.rotate(90, 0, 1, 0);
-          m_aux.translate(0.0, 0.5, 0.5);
-        break;
-        case 2:
-          m_aux.rotate(180, 0, 1, 0);
-          m_aux.translate(0.0, 0.5, 0.5);
-        break;
-        case 3:
-          m_aux.rotate(270, 0, 1, 0);
-          m_aux.translate(0.0, 0.5, 0.5);
-        break;
-        case 4:  // tapa superior
-          m_aux.rotate(-90, 1, 0, 0);
-          m_aux.translate(0.0, 0.0, 1.0);
-        break;
-        case 5: //tapa inferior
-          m_aux.rotate(90, 1, 0, 0);
-        break;
-      }
-      //m_aux.rotate(45, 0, 0, 1);
-
-      this.matricesCaras[iCara] = m_aux;
-    }
-
+    var m_aux = new Matrix4();
+    m_aux.translate(0.0, 0.5, 0.0);
+    this.matrizPropia = m_aux;
     
   }
 
-  this.dibuja = function(camara, handler){ 
+  this.dibuja = function(camara, handler, m_externa){ 
 
-    for (var iCara=0 ; iCara < 1 ; iCara++){
       var mat_aux =  new Matrix4();
+      mat_aux.multiply(m_externa);
       mat_aux.multiply(this.matrizPropia);
-      mat_aux.multiply(this.matricesCaras[iCara]);
       this.cara_m.dibuja(camara, mat_aux, handler);
-    }
 
-    //console.log('DIBUJO cubo');
+    //console.log('DIBUJO circulo');
   }
 
 
