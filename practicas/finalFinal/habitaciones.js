@@ -33,18 +33,20 @@ function habitacion_01(habitacion, gl, canvas){
   cubC.desplaza(0.0,-10.0,0.0);
   cubC.escala(9.0,1.0,9.0);
 
-  var ann = new FiguraAnillo(5, 2, 5, [0, 0, 1]);
+  var ann = new FiguraAnillo(5, 2, 5, [0, 0, 1, 1]);
   ann.prototype.construye(gl);
   ann.prototype.desplaza(0,0,-4);
+  ann.prototype.rota(30,1,0,0);
 
   var circ = new FiguraCirculo(6, [0,1,0,1])
   circ.prototype.construye(gl);
-  circ.prototype.escala(7,7,1);
 	circ.prototype.desplaza(0,0,2.5);
+	circ.prototype.escala(7,4,1);
+	circ.prototype.rota(-60,1,0,0);
 
 	var cuad = new FiguraCuadrado(6, [0,1,0,1]);
   cuad.prototype.construye(gl);
-  cuad.prototype.escala(7,7,1);
+  cuad.prototype.escala(7,4,1);
 
   var torus = new FiguraTorus(19, 6, 5, 1, [0,1,0,1]);
   torus.prototype.construye(gl);
