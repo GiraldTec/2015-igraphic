@@ -10,7 +10,7 @@ var VSHADER_SOURCE =
   '  gl_Position = u_MvpMatrix * a_Position;\n' +
   '  vec4 vertexPosition = u_ModelMatrix * a_Position;\n' +
   // Shading calculation to make the arm look three-dimensional
-  '  vec3 lightDirection = normalize(vec3(0.0, 0.0, 0.20));\n' + // Light direction
+  '  vec3 lightDirection = normalize(vec3(0.0, 0.0, 0.20));\n' + // Light direction  // luz direccional
   '  vec4 color = u_Color;\n' +  // Robot color
   '  vec3 normal = normalize((u_NormalMatrix * u_Normal).xyz);\n' +
   '  float nDotL = max(dot(normal, lightDirection), 0.0);\n' +

@@ -32,10 +32,10 @@ function main() {
 }
 
 function habitacion_prueba(habitacion, gl, canvas){
-	var cubC = new CuboCompuesto(2);
+	var cubC = new CuboCircCompuesto(10);
 	cubC.construye(gl);
   cubC.desplaza(0.0,1.0,0.0);
-  cubC.escala(1.0,1.0,2.0);
+  //cubC.escala(1.0,1.0,2.0);
   cubC.rota(30, 1, 0, 0);
 	habitacion.add_elemento(cubC);
 	habitacion.set_camara(new Camara(gl, canvas.width/canvas.height))
