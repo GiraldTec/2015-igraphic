@@ -1,4 +1,4 @@
-var VSHADER_SOURCE =
+var VSHADER_FLAT =
   'attribute vec4 a_Position;\n' +
   'uniform vec4 u_Normal;\n' +
   'uniform vec4 u_Color;\n' +
@@ -26,7 +26,7 @@ var VSHADER_SOURCE =
   '}\n';
 
 // Fragment shader program
-var FSHADER_SOURCE =
+var FSHADER_FLAT =
   '#ifdef GL_ES\n' +
   'precision mediump float;\n' +
   '#endif\n' +

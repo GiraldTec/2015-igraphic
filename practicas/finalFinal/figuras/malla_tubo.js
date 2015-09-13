@@ -1,7 +1,7 @@
 // Malla tubo
 function MallaTubo (div, rat1, rat2, altura) {
   this.puntos = [];			//	Float32Array
-  this.normal = new Vector4([1.0,0.0,0.0]);
+  this.normales = [];  // la primera es 0,1,0
   this.indices = [];		//	Uint8Array
   this.divisiones = div;
   this.buff_obj = new Object();
@@ -37,6 +37,12 @@ function MallaTubo (div, rat1, rat2, altura) {
 		p2_aux.elements[2] = z2_orig;
 		p2_aux.elements[3] = 1;
 
+		var n_aux = new Vector4();
+		n_aux.elements[0] = 0.0;
+		n_aux.elements[1] = 1.0;
+		n_aux.elements[2] = 0.0;
+		n_aux.elements[3] = 0.0;
+
 		for(var i=1; i<= this.divisiones; i++){
 			var m_aux = new Matrix4();
   		m_aux.setRotate(- i*angle , 0, 0, 1);
@@ -47,6 +53,12 @@ function MallaTubo (div, rat1, rat2, altura) {
 			this.puntos[pnc_totales*3+1] = punto1.elements[1];
 			this.puntos[pnc_totales*3+2] = punto1.elements[2];
 
+			var normal = m_aux.multiplyVector4(n_aux);
+
+  		this.normales[pnc_totales*3] = normal.elements[0];
+			this.normales[pnc_totales*3+1] = normal.elements[1];
+			this.normales[pnc_totales*3+2] = normal.elements[2];
+
 			pnc_totales = pnc_totales + 1;
 
   		var punto2 = m_aux.multiplyVector4(p2_aux);
@@ -54,6 +66,10 @@ function MallaTubo (div, rat1, rat2, altura) {
   		this.puntos[pnc_totales*3] = punto2.elements[0];
 			this.puntos[pnc_totales*3+1] = punto2.elements[1];
 			this.puntos[pnc_totales*3+2] = punto2.elements[2];
+
+  		this.normales[pnc_totales*3] = normal.elements[0];
+			this.normales[pnc_totales*3+1] = normal.elements[1];
+			this.normales[pnc_totales*3+2] = normal.elements[2];
 
 			pnc_totales = pnc_totales + 1;
 
@@ -80,11 +96,13 @@ function MallaTubo (div, rat1, rat2, altura) {
   this.initBasicShaders = function(gl){
 
     var vertices = new Float32Array(this.puntos);
+    var normals = new Float32Array(this.normales);
     var indices = new Uint8Array(this.indices);
 
     this.buff_obj.vertexBuffer = initArrayBufferForLaterUse(gl, vertices, 3, gl.FLOAT);
+    this.buff_obj.normalsBuffer = initArrayBufferForLaterUse(gl, normals, 3, gl.FLOAT);
     this.buff_obj.indexBuffer = initElementArrayBufferForLaterUse(gl, indices, gl.UNSIGNED_BYTE);
-    if (!this.buff_obj.vertexBuffer || !this.buff_obj.indexBuffer) 
+    if (!this.buff_obj.vertexBuffer || !this.buff_obj.normalsBuffer || !this.buff_obj.indexBuffer) 
       this.buff_obj = null; 
 
     this.buff_obj.numIndices = this.indices.length;
@@ -96,7 +114,7 @@ function MallaTubo (div, rat1, rat2, altura) {
 
 	this.dibuja = function(camara, matrizMod, handler){
 
-  	var program = handler.basic;
+  	var program = handler.multinormal;
 
   	//camara.calcular();
 
@@ -111,13 +129,13 @@ function MallaTubo (div, rat1, rat2, altura) {
   	//camara.dibujar_malla_basic(matrizMod, this.indices.length, program, cara_buff);
 
   	initAttributeVariable(camara.canvas, program.a_Position, this.buff_obj.vertexBuffer);
+  	initAttributeVariable(camara.canvas, program.a_Normal, this.buff_obj.vertexBuffer);
 
 		camara.canvas.bindBuffer(camara.canvas.ELEMENT_ARRAY_BUFFER, this.buff_obj.indexBuffer);
 
 		var g_modelMatrix = new Matrix4(matrizMod);
 
 		camara.canvas.uniform4f(program.u_color, 1.0,0.0,0.0, 1.0);
-		camara.canvas.uniform4f(program.u_Normal, 0.0,0.0,1.0, 0.0);
 
 		var g_mvpMatrix = new Matrix4();
 		g_mvpMatrix.set(camara.proyeccion_M);

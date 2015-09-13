@@ -69,7 +69,7 @@ function MallaCirculo (div) {
 
 	this.dibuja = function(camara, matrizMod, handler){
 
-  	var program = handler.basic;
+  	var program = handler.flat;
 
   	//camara.calcular();
 

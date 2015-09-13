@@ -95,7 +95,7 @@ function MallaAnillo (div, rat1, rat2) {
 
 	this.dibuja = function(camara, matrizMod, handler){
 
-  	var program = handler.basic;
+  	var program = handler.flat;
 
   	//camara.calcular();
 
