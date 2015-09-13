@@ -63,11 +63,10 @@ function CuboCompuesto (div) {
   this.dibuja = function(camara, handler){ 
 
     for (var iCara=0 ; iCara < 6 ; iCara++){
-      // TODO
-      // push y pop ...
-      this.cara_m.dibuja(camara, this.matricesCaras[iCara], handler);
-      //  
-      //
+      var mat_aux =  new Matrix4();
+      mat_aux.multiply(this.matrizPropia);
+      mat_aux.multiply(this.matricesCaras[iCara]);
+      this.cara_m.dibuja(camara, mat_aux, handler);
     }
 
     console.log('DIBUJO cubo');
@@ -78,12 +77,12 @@ function CuboCompuesto (div) {
     this.matrizPropia.translate(desp_x, desp_y, desp_z);
   }
 
-  this.rota = function(desp_x, desp_y, desp_z){
-    this.matrizPropia.rotate(desp_x, desp_y, desp_z);
+  this.rota = function(angulo, ejeX, ejeY, ejeZ){
+    this.matrizPropia.rotate(angulo, ejeX, ejeY, ejeZ);
   }
 
-  this.escala = function(desp_x, desp_y, desp_z){
-    this.matrizPropia.translate(desp_x, desp_y, desp_z);
+  this.escala = function(escX, escY, escZ){
+    this.matrizPropia.scale(escX, escY, escZ);
   }
 
 
