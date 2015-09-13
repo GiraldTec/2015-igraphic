@@ -25,16 +25,16 @@ function habitacion_01(habitacion, gl, canvas){
 	habitacion.add_luzDir(dir1);
 	habitacion.add_luzDir(dir2);
 
-	var dir1 = new luzDP([0.0,0.0,0.0], [0.0,0.0,0.0]);
-	var dir2 = new luzDP([0.0,0.0,1.0], [-10.0,-10.0,-10.0]);
+	var pos1 = new luzDP([1.0,1.0,1.0], [0.0,0.0,0.0]);
+	var pos2 = new luzDP([0.0,0.0,1.0], [-10.0,-10.0,-10.0]);
 
-	habitacion.add_luzDir(dir1);
-	habitacion.add_luzDir(dir2);
+	habitacion.add_luzPunt(pos1);
+	habitacion.add_luzPunt(pos2);
 
 	// Luces de punto
 
 
-  var cubC = new CuboCompuesto(5);
+  var cubC = new CuboCompuesto(5,[0,1,0,1]);
 	cubC.construye(gl);
   cubC.desplaza(0.0,-10.0,0.0);
   cubC.escala(9.0,1.0,9.0);

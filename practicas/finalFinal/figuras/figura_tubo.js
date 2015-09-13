@@ -8,8 +8,8 @@ function FiguraTubo (div, rat1, rat2, color, altura, nDir) {
 
   this.prototype.cara_m = new MallaTubo(div, rat1, rat2, altura, nDir);
 
-  this.dibuja = function(camara, handler, m_externa){
-    this.prototype.dibuja(camara, handler, m_externa);
+  this.dibuja = function(camara, handler, m_externa,luzAmb,lucesDir, lucesPos){
+    this.prototype.dibuja(camara, handler, m_externa,luzAmb,lucesDir, lucesPos);
   }
 
   this.construye = function(gl){

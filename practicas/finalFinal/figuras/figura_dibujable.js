@@ -28,12 +28,12 @@ function FigDibujable(color){
     
   }
 
-  this.dibuja = function(camara, handler, m_externa){ 
+  this.dibuja = function(camara, handler, m_externa, luzAmb, lucesDir, lucesPos){ 
 
       var mat_aux =  new Matrix4();
       mat_aux.multiply(m_externa);
       mat_aux.multiply(this.matrizPropia);
-      this.cara_m.dibuja(camara, mat_aux, handler, this.colorRGBA);
+      this.cara_m.dibuja(camara, mat_aux, handler, this.colorRGBA, luzAmb, lucesDir, lucesPos);
 
     //console.log('DIBUJO circulo');
   }

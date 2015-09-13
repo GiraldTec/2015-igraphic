@@ -39,3 +39,19 @@ function initAttributeVariable(gl, a_attribute, buffer) {
   gl.vertexAttribPointer(a_attribute, buffer.num, buffer.type, false, 0, 0);
   gl.enableVertexAttribArray(a_attribute);
 }
+
+function obtenerColor(luces){
+  var posColor = [];
+  for( var i= 0; i< luces.length; i++){
+    posColor = posColor.concat(luces[i].tonoRGB);
+  }
+  return posColor;
+}
+
+function obtenerPosDir(luces){
+  var posLight = [];
+  for( var i= 0; i< luces.length; i++){
+    posLight = posLight.concat(luces[i].dirPos);
+  }
+  return posLight;
+}
