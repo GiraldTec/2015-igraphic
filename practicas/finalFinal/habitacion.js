@@ -9,10 +9,12 @@ function Habitacion (gl) {
 
 	this.gl = gl;
 
+	this.camara = undefined;
+
 	this.add_luzDir = function(luz){		this.luces_direccionales.push(luz);	}
 	this.add_luzPunt = function(luz){		this.luces_punto.push(luz);	}
 	this.add_elemento = function(elem){		this.elementos.push(elem);	}
-	this.add_camara = function(cam){		this.camaras.push(cam);	}
+	this.set_camara = function(cam){		this.camara = cam; this.camara.calcular();	}
 	this.set_ambiente = function(amb){		this.luz_ambiente = amb;	}
 
 	this.tick = function(){
@@ -24,9 +26,8 @@ function Habitacion (gl) {
 	this.dibuja = function(handler){
 
 		for(var i = 0;  i < this.elementos.length; i++){
-			this.elementos[i].dibuja(this.gl, handler);
+			this.elementos[i].dibuja(this.camara, handler);
 		}
-
 
 	}
 }

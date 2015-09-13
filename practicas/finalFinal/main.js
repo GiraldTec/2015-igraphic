@@ -12,20 +12,27 @@ function main() {
   var progHand = new ProgramHandler(gl);
 
   var hab = new Habitacion(gl);
-  habitacion_prueba(hab)
+  habitacion_prueba(hab, gl, canvas)
+
+	gl.clearColor(1, 1,1, 1);
+  gl.enable(gl.DEPTH_TEST);
 
 
 
-
-   var tick = function() {
+  //var tick = function() {
 	  //hab.tick();
+	  //gl.viewport(0, 0, canvas.width, canvas.height);
+
 	  hab.dibuja(progHand);
-	  window.requestAnimationFrame(tick, canvas);
-  };
-  tick();
+	 // window.requestAnimationFrame(tick, canvas);
+  //};
+  //tick();
 
 }
 
-function habitacion_prueba(habitacion){
-	habitacion.add_elemento(new CuboCompuesto(2));
+function habitacion_prueba(habitacion, gl, canvas){
+	var cubC = new CuboCompuesto(2);
+	cubC.construye(gl);
+	habitacion.add_elemento(cubC);
+	habitacion.set_camara(new Camara(gl, canvas.width/canvas.height))
 }

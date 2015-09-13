@@ -126,7 +126,7 @@ function main() {
 }
 
 function initVertexBuffers(gl) {
-  var miCirc = new Cubo(5);
+  var miCirc = new Cubo(1);
   miCirc.construye();
 
   var vertices = new Float32Array(miCirc.puntos);

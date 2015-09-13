@@ -16,7 +16,7 @@ function basicProgram(gl, vs, fs){
   prog.u_MvpMatrix = gl.getUniformLocation(prog, 'u_MvpMatrix');
   prog.u_ModelMatrix = gl.getUniformLocation(prog, 'u_ModelMatrix');
   prog.u_NormalMatrix = gl.getUniformLocation(prog, 'u_NormalMatrix');
-  if (!prog.a_Position || !prog.u_Normal || !prog.u_color || !prog.u_MvpMatrix || !prog.u_ModelMatrix || !prog.u_NormalMatrix ) {
+  if ( prog.a_Position < 0 || !prog.u_Normal || !prog.u_color || !prog.u_MvpMatrix || !prog.u_ModelMatrix || !prog.u_NormalMatrix ){
     console.log('Failed to get the storage location of attribute or uniform variable from prog'); 
     return undefined;
   }
