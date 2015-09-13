@@ -14,19 +14,20 @@ function main() {
   var hab = new Habitacion(gl);
   habitacion_prueba(hab, gl, canvas)
 
-	gl.clearColor(1, 1,1, 1);
+	gl.clearColor(0.0, 1.0, 0.0, 1);
   gl.enable(gl.DEPTH_TEST);
 
+  gl.viewport(0, 0, canvas.width, canvas.height);
 
 
-  //var tick = function() {
-	  //hab.tick();
-	  //gl.viewport(0, 0, canvas.width, canvas.height);
-
+  var tick = function() {
+//	  hab.tick();
+//	  gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);    //
 	  hab.dibuja(progHand);
-	 // window.requestAnimationFrame(tick, canvas);
-  //};
-  //tick();
+	  window.requestAnimationFrame(tick, canvas);
+  };
+  tick();
 
 }
 

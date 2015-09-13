@@ -59,44 +59,47 @@ function main() {
     return;
   }
 
-  var prog = createProgram(gl, VSHADER_SOURCE, FSHADER_SOURCE);
-  // Get the storage locations of uniform variables and so on
-  prog.u_ModelMatrix = gl.getUniformLocation(prog, 'u_ModelMatrix');
-  prog.u_LightColor = gl.getUniformLocation(prog, 'u_LightColor');
-  prog.u_LightPosition = gl.getUniformLocation(prog, 'u_LightPosition');
-  prog.u_AmbientLight = gl.getUniformLocation(prog, 'u_AmbientLight');
-  prog.u_Color = gl.getUniformLocation(prog, 'u_Color');
-  if (!prog.u_LightColor || !prog.u_LightPosition　|| !prog.u_AmbientLight || !prog.u_Color) { 
-    console.log('Failed to get the storage location');
+  // Initialize shaders
+  if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
+    console.log('Failed to intialize shaders.');
     return;
   }
 
-
-
   // Set the vertex coordinates, the color and the normal
-  var n = initVertexBuffers(gl, prog);
+  var n = initVertexBuffers(gl);
   if (n < 0) {
     console.log('Failed to set the vertex information');
     return;
   }
 
   // Set the clear color and enable the depth test
-  gl.clearColor(1.0, 1.0, 1.0, 1.0);
+  gl.clearColor(0.0, 0.0, 0.0, 1.0);
   gl.enable(gl.DEPTH_TEST);
 
   var camara = new Camara(gl,canvas.width/canvas.height);
 
+  // Get the storage locations of uniform variables and so on
+  var u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
+  //var u_MvpMatrix = gl.getUniformLocation(gl.program, 'u_MvpMatrix');
+  //var u_NormalMatrix = gl.getUniformLocation(gl.program, 'u_NormalMatrix');
+  var u_LightColor = gl.getUniformLocation(gl.program, 'u_LightColor');
+  var u_LightPosition = gl.getUniformLocation(gl.program, 'u_LightPosition');
+  var u_AmbientLight = gl.getUniformLocation(gl.program, 'u_AmbientLight');
+  var u_Color = gl.getUniformLocation(gl.program, 'u_Color');
+  if (!u_LightColor || !u_LightPosition　|| !u_AmbientLight || !u_Color) { 
+    console.log('Failed to get the storage location');
+    return;
+  }
 
-  gl.useProgram(prog);
  // if (!initArrayBuffer(gl, 'a_Color', colores, gl.FLOAT, 4)) return -1;
-  gl.uniform4f(prog.u_Color, 1.0,1.0,1.0, 1.0);
+  gl.uniform4f(u_Color, 1.0,1.0,1.0, 1.0);
 
   // Set the light color (white)
-  gl.uniform3fv(prog.u_LightColor, [1.0, 1.0,0, 0,0,1], 2);  // AMARILLO + AZUL
+  gl.uniform3fv(u_LightColor, [1.0, 1.0,0, 0,0,1], 2);  // AMARILLO + AZUL
   // Set the light direction (in the world coordinate)
-  gl.uniform3fv(prog.u_LightPosition, [2.3, 4.0, -3.5, 0.0, -4.0, 3.5], 2); // AMARILLO + AZUL
+  gl.uniform3fv(u_LightPosition, [2.3, 4.0, -3.5, 0.0, -4.0, 3.5], 2); // AMARILLO + AZUL
   // Set the ambient light
-  gl.uniform3f(prog.u_AmbientLight, 0,0,0);
+  gl.uniform3f(u_AmbientLight, 0,0,0);
 
   var modelMatrix = new Matrix4();  // Model matrix
   var mvpMatrix = new Matrix4();    // Model view projection matrix
@@ -105,7 +108,7 @@ function main() {
   // Calculate the model matrix
  // modelMatrix.setRotate(45, 0, 1, 0); // Rotate around the y-axis
   // Pass the model matrix to u_ModelMatrix
-  gl.uniformMatrix4fv(prog.u_ModelMatrix, false, modelMatrix.elements);
+  gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
 
   // Pass the model view projection matrix to u_MvpMatrix
   camara.calcular();//mvpMatrix.setPerspective(30, canvas.width/canvas.height, 1, 100);
@@ -115,14 +118,14 @@ function main() {
 
   var tick = function() {
   currentAngle = currentAngle + 0.2;  // Update current rotation angle
-  camara.dibujar(modelMatrix,n,currentAngle, prog);
+  camara.dibujar(modelMatrix,n,currentAngle);
   window.requestAnimationFrame(tick, canvas);
   };
   tick();
 
 }
 
-function initVertexBuffers(gl, prog) {
+function initVertexBuffers(gl) {
   var miCirc = new Cubo(1);
   miCirc.construye();
 
@@ -131,8 +134,8 @@ function initVertexBuffers(gl, prog) {
   var indices = new Uint8Array(miCirc.indices);
 
   // Write the vertex property to buffers (coordinates, colors and normals)
-  if (!initArrayBuffer(gl, 'a_Position', vertices, 3, gl.FLOAT, prog)) return -1;
-  if (!initArrayBuffer(gl, 'a_Normal', normals, 3, gl.FLOAT, prog)) return -1;
+  if (!initArrayBuffer(gl, 'a_Position', vertices, 3, gl.FLOAT)) return -1;
+  if (!initArrayBuffer(gl, 'a_Normal', normals, 3, gl.FLOAT)) return -1;
 
 
   // Unbind the buffer object
@@ -150,7 +153,7 @@ function initVertexBuffers(gl, prog) {
   return indices.length;
 }
 
-function initArrayBuffer(gl, attribute, data, num, type, prog) {
+function initArrayBuffer(gl, attribute, data, num, type) {
   // Create a buffer object
   var buffer = gl.createBuffer();
   if (!buffer) {
@@ -161,7 +164,7 @@ function initArrayBuffer(gl, attribute, data, num, type, prog) {
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
   // Assign the buffer object to the attribute variable
-  var a_attribute = gl.getAttribLocation(prog, attribute);
+  var a_attribute = gl.getAttribLocation(gl.program, attribute);
   if (a_attribute < 0) {
     console.log('Failed to get the storage location of ' + attribute);
     return false;

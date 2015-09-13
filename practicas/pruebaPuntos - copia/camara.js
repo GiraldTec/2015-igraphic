@@ -69,7 +69,7 @@ function Camara (gl, ratio) {
 
 	}
 
-	this.dibujar = function( m_modelo , n, angulo, prog){
+	this.dibujar = function( m_modelo , n, angulo){
 
 		this.set_rotar(angulo,0,1,0);
 
@@ -83,20 +83,20 @@ function Camara (gl, ratio) {
 
 	  this.proyeccion_M.multiply(m_modelo);
 
-	  prog.u_MvpMatrix = this.canvas.getUniformLocation(prog, 'u_MvpMatrix');
-	  prog.u_NormalMatrix = gl.getUniformLocation(prog, 'u_NormalMatrix');
-	  if (!prog.u_MvpMatrix || !prog.u_NormalMatrix) { 
+	  var u_MvpMatrix = this.canvas.getUniformLocation(this.canvas.program, 'u_MvpMatrix');
+	  var u_NormalMatrix = gl.getUniformLocation(gl.program, 'u_NormalMatrix');
+	  if (!u_MvpMatrix || !u_NormalMatrix) { 
 	    console.log('Failed to get the storage location');
 	    return;
 	  }
 
-	  this.canvas.uniformMatrix4fv(prog.u_MvpMatrix, false, this.proyeccion_M.elements);
+	  this.canvas.uniformMatrix4fv(u_MvpMatrix, false, this.proyeccion_M.elements);
 
 	  var normalMatrix = new Matrix4(); // Transformation matrix for normals
 	  // Pass the matrix to transform the normal based on the model matrix to u_NormalMatrix
 	  normalMatrix.setInverseOf(m_modelo);
 	  normalMatrix.transpose();
-	  this.canvas.uniformMatrix4fv(prog.u_NormalMatrix, false, normalMatrix.elements);
+	  this.canvas.uniformMatrix4fv(u_NormalMatrix, false, normalMatrix.elements);
 
 	  // Clear color and depth buffer
 	  this.canvas.clear(this.canvas.COLOR_BUFFER_BIT | this.canvas.DEPTH_BUFFER_BIT);

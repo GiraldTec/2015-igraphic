@@ -3,7 +3,6 @@
 function CuboCompuesto (div) {
 
   this.cara_m = new MallaCuadrada(div);
-  this.cara_buff = new Object();
 
   this.colores = [];    
   this.matricesCaras = [];
@@ -26,7 +25,7 @@ function CuboCompuesto (div) {
   this.construye = function(gl) {
     // Hay que hacer las distintas caras del cubo juntando varias caras 
     // (es mejor, aunque sobrarían algunos puntos)
-    this.cara_m.construye();
+    this.cara_m.construye(gl);
 
     for (var iCara=0 ; iCara < 6 ; iCara++){
       var m_aux = new Matrix4();
@@ -58,15 +57,15 @@ function CuboCompuesto (div) {
       this.matricesCaras[iCara] = m_aux;
     }
 
-    this.initBasicShaders(gl);
+    
   }
 
   this.dibuja = function(camara, handler){ 
 
-    for (var iCara=0 ; iCara < 1 ; iCara++){
+    for (var iCara=0 ; iCara < 6 ; iCara++){
       // TODO
       // push y pop ...
-      this.cara_m.dibuja(camara, this.cara_buff, this.matricesCaras[iCara], handler);
+      this.cara_m.dibuja(camara, this.matricesCaras[iCara], handler);
       //  
       //
     }
@@ -87,20 +86,5 @@ function CuboCompuesto (div) {
     this.matrizPropia.translate(desp_x, desp_y, desp_z);
   }
 
-  this.initBasicShaders = function(gl){
 
-    var vertices = new Float32Array(this.cara_m.puntos);
-    var indices = new Uint8Array(this.cara_m.indices);
-
-    this.cara_buff.vertexBuffer = initArrayBufferForLaterUse(gl, vertices, 3, gl.FLOAT);
-    this.cara_buff.indexBuffer = initElementArrayBufferForLaterUse(gl, indices, gl.UNSIGNED_BYTE);
-    if (!this.cara_buff.vertexBuffer || !this.cara_buff.indexBuffer) 
-      this.cara_buff = null; 
-
-    this.cara_buff.numIndices = this.cara_m.indices.length;
-
-    // Unbind the buffer object
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
-  }
 }

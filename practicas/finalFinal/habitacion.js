@@ -14,12 +14,14 @@ function Habitacion (gl) {
 	this.add_luzDir = function(luz){		this.luces_direccionales.push(luz);	}
 	this.add_luzPunt = function(luz){		this.luces_punto.push(luz);	}
 	this.add_elemento = function(elem){		this.elementos.push(elem);	}
-	this.set_camara = function(cam){		this.camara = cam; this.camara.calcular();	}
+	this.set_camara = function(cam){		this.camara = cam; 
+		this.camara.calcular();	
+	}
 	this.set_ambiente = function(amb){		this.luz_ambiente = amb;	}
 
 	this.tick = function(){
 		for(var i = 0;  i < this.elementos.length; i++){
-			this.elementos[i].tick();
+			//this.elementos[i].tick();
 		}
 	}
 

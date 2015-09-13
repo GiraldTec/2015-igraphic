@@ -5,8 +5,9 @@ function MallaCuadrada (div) {
   this.normal = new Vector4([0.0,0.0,1.0]);
   this.indices = [];		//	Uint8Array
   this.divisiones = div;
+  this.buff_obj = new Object();
 
-  this.construye = function() {
+  this.construye = function(gl) {
   	var x_orig = -0.5;
   	var y_orig = 0.5;
   	var z_orig = 0.0;
@@ -32,25 +33,53 @@ function MallaCuadrada (div) {
 			}
 			
 		}
+
+
+		this.initBasicShaders(gl);
   }
 
-  this.dibuja = function(camara, cara_buff, matrizMod, handler){
+
+  this.initBasicShaders = function(gl){
+
+    var vertices = new Float32Array(this.puntos);
+    var indices = new Uint8Array(this.indices);
+
+    this.buff_obj.vertexBuffer = initArrayBufferForLaterUse(gl, vertices, 3, gl.FLOAT);
+    this.buff_obj.indexBuffer = initElementArrayBufferForLaterUse(gl, indices, gl.UNSIGNED_BYTE);
+    if (!this.buff_obj.vertexBuffer || !this.buff_obj.indexBuffer) 
+      this.buff_obj = null; 
+
+    this.buff_obj.numIndices = this.indices.length;
+
+    // Unbind the buffer object
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+  }
+
+  this.dibuja = function(camara, matrizMod, handler){
 
   	var program = handler.basic;
+
+  	//camara.calcular();
+
+		camara.canvas.bindFramebuffer(camara.canvas.FRAMEBUFFER, null);               // Change the drawing destination to color buffer
+    
+		var canvas = document.getElementById('webgl');
+
+    //camara.canvas.viewport(0, 0, canvas.width, canvas.height);
+    //camara.canvas.clear(camara.canvas.COLOR_BUFFER_BIT | camara.canvas.DEPTH_BUFFER_BIT);    //
 
    	camara.canvas.useProgram(program);
   	//camara.dibujar_malla_basic(matrizMod, this.indices.length, program, cara_buff);
 
-  	initAttributeVariable(camara.canvas, program.a_Position, cara_buff.vertexBuffer);
+  	initAttributeVariable(camara.canvas, program.a_Position, this.buff_obj.vertexBuffer);
 
-		camara.canvas.bindBuffer(camara.canvas.ELEMENT_ARRAY_BUFFER, cara_buff.indexBuffer);
+		camara.canvas.bindBuffer(camara.canvas.ELEMENT_ARRAY_BUFFER, this.buff_obj.indexBuffer);
 
 		var g_modelMatrix = new Matrix4(matrizMod);
 
-		camara.canvas.bindBuffer(camara.canvas.ELEMENT_ARRAY_BUFFER, cara_buff.indexBuffer);
-
 		camara.canvas.uniform4f(program.u_color, 1.0,0.0,0.0, 1.0);
-		camara.canvas.uniform4f(program.u_Normal, 1.0,0.0,0.0, 0.0);
+		camara.canvas.uniform4f(program.u_Normal, 0.0,0.0,1.0, 0.0);
 
 		var g_mvpMatrix = new Matrix4();
 		g_mvpMatrix.set(camara.proyeccion_M);
@@ -66,9 +95,10 @@ function MallaCuadrada (div) {
 	  camara.canvas.uniformMatrix4fv(program.u_NormalMatrix, false, normalMatrix.elements);
 
 	  // Clear color and depth buffer
-	  camara.canvas.clear(camara.canvas.COLOR_BUFFER_BIT | camara.canvas.DEPTH_BUFFER_BIT);
+	 	//camara.canvas.clear(camara.canvas.COLOR_BUFFER_BIT | camara.canvas.DEPTH_BUFFER_BIT);
 
-		camara.canvas.drawElements(camara.canvas.TRIANGLES, handler.numIndices, camara.canvas.UNSIGNED_BYTE, 0);
+	  // Draw the cube
+	  camara.canvas.drawElements(camara.canvas.TRIANGLES, this.indices.length, camara.canvas.UNSIGNED_BYTE, 0);
 
   }
 

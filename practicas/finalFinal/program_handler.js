@@ -12,7 +12,7 @@ function basicProgram(gl, vs, fs){
   var prog = createProgram(gl, vs, fs);
   prog.a_Position = gl.getAttribLocation(prog, 'a_Position');
   prog.u_Normal = gl.getUniformLocation(prog, 'u_Normal');
-  prog.u_color = gl.getUniformLocation(prog, 'u_color');
+  prog.u_color = gl.getUniformLocation(prog, 'u_Color');
   prog.u_MvpMatrix = gl.getUniformLocation(prog, 'u_MvpMatrix');
   prog.u_ModelMatrix = gl.getUniformLocation(prog, 'u_ModelMatrix');
   prog.u_NormalMatrix = gl.getUniformLocation(prog, 'u_NormalMatrix');
