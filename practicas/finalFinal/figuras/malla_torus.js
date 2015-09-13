@@ -1,76 +1,57 @@
 // Malla Torus
-function MallaTorus (div, rat1, rat2) {
+function MallaTorus (div1, div2, rat1, rat2) {
   this.puntos = [];			//	Float32Array
   this.normales = [];
   this.indices = [];		//	Uint8Array
-  this.divisiones = div;
+  this.segmentosTorus = div1;
+  this.divisionesTubo = div2;
   this.buff_obj = new Object();
-  this.rad1 = rat1;
-  this.rad2 = rat2;
-  this.altura = altura;
+  this.radTorus = rat1;
+  this.radTubo = rat2;
 
   this.construye = function(gl) {
-  	var x1_orig = 0.0;
-  	var y1_orig = this.rad1;//Math.sqrt(2.0)/2.0;
-  	var z1_orig = 0.0;
+  	
+  	var circulo = obtenerCirculo(this.divisionesTubo, this.radTubo);
 
-  	var x2_orig = 0.0;
-  	var y2_orig = this.rad2;//Math.sqrt(2.0)/2.0;
-  	var z2_orig = this.altura;
+  	var angle = 360.0 / this.segmentosTorus;
 
-  	var pnc_totales = 0; // indices de los puntos / normales / colores del CUBO
-  	var i_totales = 0; //
+  	var max_puntos = this.segmentosTorus * this.divisionesTubo;
 
-		var p_ori = new Vector4();
-		p_ori.elements[3] = 1;
+  	var pnc_totales = 0;
+  	var ind_totales = 0;
 
-  	var angle = 360.0 / this.divisiones;
-		var p1_aux = new Vector4();
-		p1_aux.elements[0] = x1_orig;
-		p1_aux.elements[1] = y1_orig;
-		p1_aux.elements[2] = z1_orig;
-		p1_aux.elements[3] = 1;
 
-		var p2_aux = new Vector4();
-		p2_aux.elements[0] = x2_orig;
-		p2_aux.elements[1] = y2_orig;
-		p2_aux.elements[2] = z2_orig;
-		p2_aux.elements[3] = 1;
+		
+		for(var i=0; i< this.segmentosTorus; i++){
+			  	var m_aux = new Matrix4();
+				
+		  		m_aux.rotate(i*angle, 0, 1, 0);
+		  		m_aux.translate(0,0, this.radTubo + this.radTorus);
+		  		m_aux.rotate(90, 0, 1, 0);
 
-		for(var i=1; i<= this.divisiones; i++){
-			var m_aux = new Matrix4();
-  		m_aux.setRotate(- i*angle , 0, 0, 1);
+  		var circulo_aux = transformaCirculo(m_aux, circulo);
 
-  		var punto1 = m_aux.multiplyVector4(p1_aux);
 
-  		this.puntos[pnc_totales*3] = punto1.elements[0];
-			this.puntos[pnc_totales*3+1] = punto1.elements[1];
-			this.puntos[pnc_totales*3+2] = punto1.elements[2];
+  		for (var j=0; j < this.divisionesTubo; j++){
+  			this.puntos[pnc_totales*3] = circulo_aux.puntos[j*3];
+  			this.puntos[pnc_totales*3+1] = circulo_aux.puntos[j*3+1];
+  			this.puntos[pnc_totales*3+2] = circulo_aux.puntos[j*3+2];
 
-			pnc_totales = pnc_totales + 1;
+  			this.normales[pnc_totales*3] = circulo_aux.normales[j*3];
+  			this.normales[pnc_totales*3+1] = circulo_aux.normales[j*3+1];
+  			this.normales[pnc_totales*3+2] = circulo_aux.normales[j*3+2];
 
-  		var punto2 = m_aux.multiplyVector4(p2_aux);
+  			this.indices[ind_totales]   = i*this.divisionesTubo + j;
+				this.indices[ind_totales+1] = i*this.divisionesTubo + ((j + 1)%this.divisionesTubo);
+				this.indices[ind_totales+2] = ((i+1)%this.segmentosTorus)*this.divisionesTubo + j;
 
-  		this.puntos[pnc_totales*3] = punto2.elements[0];
-			this.puntos[pnc_totales*3+1] = punto2.elements[1];
-			this.puntos[pnc_totales*3+2] = punto2.elements[2];
+				this.indices[ind_totales+3] = ((i+1)%this.segmentosTorus)*this.divisionesTubo + j;
+				this.indices[ind_totales+4] = i*this.divisionesTubo + ((j + 1)%this.divisionesTubo);
+				this.indices[ind_totales+5] = ((i+1)%this.segmentosTorus)*this.divisionesTubo + ((j + 1)%this.divisionesTubo);
 
-			pnc_totales = pnc_totales + 1;
-
-			var actualN = (2*i)%(this.divisiones*2);
-
-			this.indices[i_totales] = 2*i-2 ;
-			this.indices[i_totales+1] = 2*i-1 ;
-			this.indices[i_totales+2] = actualN;
-
-			this.indices[i_totales+3] = actualN ;
-			this.indices[i_totales+4] = 2*i-1 ;
-			this.indices[i_totales+5] = actualN+1;
-
-			//this.indices[i_totales+2] = (i+1)%(this.divisiones+1);
-
-			i_totales = i_totales +6; 
-
+  			pnc_totales = pnc_totales + 1;
+  			ind_totales = ind_totales + 6;
+  		}
 		}
 
 		this.initBasicShaders(gl);
@@ -80,11 +61,13 @@ function MallaTorus (div, rat1, rat2) {
   this.initBasicShaders = function(gl){
 
     var vertices = new Float32Array(this.puntos);
+    var normals = new Float32Array(this.normales);
     var indices = new Uint8Array(this.indices);
 
     this.buff_obj.vertexBuffer = initArrayBufferForLaterUse(gl, vertices, 3, gl.FLOAT);
+    this.buff_obj.normalsBuffer = initArrayBufferForLaterUse(gl, normals, 3, gl.FLOAT);
     this.buff_obj.indexBuffer = initElementArrayBufferForLaterUse(gl, indices, gl.UNSIGNED_BYTE);
-    if (!this.buff_obj.vertexBuffer || !this.buff_obj.indexBuffer) 
+    if (!this.buff_obj.vertexBuffer || !this.buff_obj.normalsBuffer || !this.buff_obj.indexBuffer) 
       this.buff_obj = null; 
 
     this.buff_obj.numIndices = this.indices.length;
@@ -96,7 +79,7 @@ function MallaTorus (div, rat1, rat2) {
 
 	this.dibuja = function(camara, matrizMod, handler){
 
-  	var program = handler.flat;
+  	var program = handler.multinormal;
 
   	//camara.calcular();
 
@@ -111,13 +94,13 @@ function MallaTorus (div, rat1, rat2) {
   	//camara.dibujar_malla_basic(matrizMod, this.indices.length, program, cara_buff);
 
   	initAttributeVariable(camara.canvas, program.a_Position, this.buff_obj.vertexBuffer);
+  	initAttributeVariable(camara.canvas, program.a_Normal, this.buff_obj.vertexBuffer);
 
 		camara.canvas.bindBuffer(camara.canvas.ELEMENT_ARRAY_BUFFER, this.buff_obj.indexBuffer);
 
 		var g_modelMatrix = new Matrix4(matrizMod);
 
 		camara.canvas.uniform4f(program.u_color, 1.0,0.0,0.0, 1.0);
-		camara.canvas.uniform4f(program.u_Normal, 0.0,0.0,1.0, 0.0);
 
 		var g_mvpMatrix = new Matrix4();
 		g_mvpMatrix.set(camara.proyeccion_M);
@@ -136,7 +119,7 @@ function MallaTorus (div, rat1, rat2) {
 	 	//camara.canvas.clear(camara.canvas.COLOR_BUFFER_BIT | camara.canvas.DEPTH_BUFFER_BIT);
 
 	  // Draw the cube
-	  camara.canvas.drawElements(camara.canvas.TRIANGLES, this.indices.length, camara.canvas.UNSIGNED_BYTE, 0);
+	  camara.canvas.drawElements(camara.canvas.LINES, this.indices.length, camara.canvas.UNSIGNED_BYTE, 0);
 
   }
 
@@ -145,21 +128,20 @@ function MallaTorus (div, rat1, rat2) {
 
 }
 
-function obtenerCirculo(div){
+function obtenerCirculo(div, rad){
 
 	var circulo =new Object();
+	circulo.puntos = [];
+	circulo.normales = [];
 
   var x_orig = 0.0;
-	var y_orig = 0.5;
+	var y_orig = rad;
 	var z_orig = 0.0;
 
 	var pnc_totales = 0; // indices de los puntos / normales / colores del CUBO
 	var i_totales = 0; //
 
-	var p_ori = new Vector4();
-	p_ori.elements[3] = 1;
-
-	var angle = 360.0 / this.divisiones;
+	var angle = 360.0 / div;
 	var p_aux = new Vector4();
 	p_aux.elements[0] = x_orig;
 	p_aux.elements[1] = y_orig;
@@ -172,28 +154,70 @@ function obtenerCirculo(div){
 	n_aux.elements[2] = 0.0;
 	n_aux.elements[3] = 0;
 
-	for(var i=1; i<=this.divisiones; i++){
+	for(var i=1; i<=div; i++){
 		var m_aux = new Matrix4();
 		m_aux.setRotate( i*angle , 0, 0, 1);
 
 		var punto = m_aux.multiplyVector4(p_aux);
-		var normal = m_aux.multiplyVector4(p_aux);
+		var normal = m_aux.multiplyVector4(n_aux);
+
+		var normal_N =  new Vector3(normal.elements);
+		normal_N.normalize();
 
 		circulo.puntos[pnc_totales*3] = punto.elements[0];
 		circulo.puntos[pnc_totales*3+1] = punto.elements[1];
 		circulo.puntos[pnc_totales*3+2] = punto.elements[2];
 
+		circulo.normales[pnc_totales*3] = normal_N.elements[0];
+		circulo.normales[pnc_totales*3+1] = normal_N.elements[1];
+		circulo.normales[pnc_totales*3+2] = normal_N.elements[2];
+
 		pnc_totales = pnc_totales + 1;
-
-		circulo.indices[i_totales] = 0 ;
-		circulo.indices[i_totales+1] = i ;
-		circulo.indices[i_totales+2] = (i+1)%(this.divisiones+1);
-		if (this.indices[i_totales+2] ==0) this.indices[i_totales+2] =1;
-
-		i_totales = i_totales +3; 
 
 	}
 
+	circulo.divisiones = div;
+
 	return circulo;
 
+}
+
+function transformaCirculo( matriz, circulo){
+
+	var new_circ = new Object();
+	new_circ.puntos = [];
+	new_circ.normales = [];
+
+
+	for(var i=0; i<circulo.divisiones; i++){
+		var p_aux = new Vector4();
+		p_aux.elements[0] = circulo.puntos[3*i];
+		p_aux.elements[1] = circulo.puntos[3*i+1];
+		p_aux.elements[2] = circulo.puntos[3*i+2];
+		p_aux.elements[3] = 1;
+
+
+		var n_aux = new Vector4();
+		n_aux.elements[0] = circulo.normales[3*i];
+		n_aux.elements[1] = circulo.normales[3*i+1];
+		n_aux.elements[2] = circulo.normales[3*i+2];
+		n_aux.elements[3] = 0;
+
+		var punto = matriz.multiplyVector4(p_aux);
+		var normal = matriz.multiplyVector4(n_aux);
+
+		var normal_N =  new Vector3(normal.elements);
+		normal_N.normalize();
+
+		new_circ.puntos[i*3] = punto.elements[0];
+		new_circ.puntos[i*3+1] = punto.elements[1];
+		new_circ.puntos[i*3+2] = punto.elements[2];
+
+		new_circ.normales[i*3] = normal_N.elements[0];
+		new_circ.normales[i*3+1] = normal_N.elements[1];
+		new_circ.normales[i*3+2] = normal_N.elements[2];
+
+	}
+
+	return new_circ;
 }

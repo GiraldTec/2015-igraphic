@@ -32,7 +32,7 @@ function main() {
 }
 
 function habitacion_prueba(habitacion, gl, canvas){
-	var cubC = new CuboTuboCompuesto(8, 0.2,0.5);
+	var cubC = new CuboTorusCompuesto(7,7 , 1.5,1.0);
 	cubC.construye(gl);
   //cubC.desplaza(0.0,1.0,0.0);
   //cubC.escala(1.0,1.0,2.0);
