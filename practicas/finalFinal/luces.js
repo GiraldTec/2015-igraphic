@@ -1,18 +1,7 @@
 // Luz Direccional
-function luzD ( color, direccion){
+function luzDP ( color, dirPos){
 
 	this.tonoRGB = color;
-	this.direccion = direccion;
-
-}
-
-
-
-// Luz Posicional
-function luzP ( color, posicion, direccion){
-
-	this.tonoRGB = color;
-	this.posicion = posicion;
-	this.direccion = direccion;
+	this.dirPos = dirPos;
 
 }
