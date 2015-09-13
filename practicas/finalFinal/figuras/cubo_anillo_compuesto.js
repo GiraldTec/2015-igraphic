@@ -1,8 +1,8 @@
-// Cubo Circulo compuesto
+// Cubo Anillo compuesto
 
-function CuboCircCompuesto (div) {
+function CuboAnilloCompuesto (div, rat1, rat2) {
 
-  this.cara_m = new MallaCirculo(div);
+  this.cara_m = new MallaAnillo(div, rat1, rat2);
 
   this.colores = [];    
   this.matricesCaras = [];
@@ -29,6 +29,7 @@ function CuboCircCompuesto (div) {
 
     for (var iCara=0 ; iCara < 6 ; iCara++){
       var m_aux = new Matrix4();
+
       switch(iCara) {
         case 0:
           m_aux.translate(0.0, 0.5, 0.5);
@@ -53,6 +54,7 @@ function CuboCircCompuesto (div) {
           m_aux.rotate(90, 1, 0, 0);
         break;
       }
+      //m_aux.rotate(45, 0, 0, 1);
 
       this.matricesCaras[iCara] = m_aux;
     }
