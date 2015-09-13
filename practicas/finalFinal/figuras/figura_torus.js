@@ -69,7 +69,7 @@ function figuraTorus (div1, div2, rat1, rat2, color) {
       this.cara_m.dibuja(camara, mat_aux, handler);
     }
 
-    console.log('DIBUJO cubo');
+    //console.log('DIBUJO cubo');
   }
 
 

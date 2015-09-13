@@ -33,11 +33,14 @@ function habitacion_01(habitacion, gl, canvas){
 
 
 
-  
+  var circ = new FiguraCirculo(6, [0,1,0])
+  circ.construye(gl);
+  circ.escala(7,7,1);
+	circ.desplaza(0,0,5);
 
 	habitacion.add_elemento(cubC);
 	habitacion.add_elemento(ann);
-
+	habitacion.add_elemento(circ);
 
 
 	habitacion.set_camara(new Camara(gl, canvas.width/canvas.height, 40, 40, 10 , 1, 100))

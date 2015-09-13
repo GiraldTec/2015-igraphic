@@ -69,7 +69,7 @@ function CuboCompuesto (div) {
       this.cara_m.dibuja(camara, mat_aux, handler);
     }
 
-    console.log('DIBUJO cubo');
+    //console.log('DIBUJO cubo');
   }
 
 

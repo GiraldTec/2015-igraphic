@@ -14,7 +14,7 @@ function CilindroCompuesto (){//alt, rad1, rad2, divA, divH) {
   }
 
   this.dibuja = function(){
-    console.log('DIBUJO CILINDRO');
+    //console.log('DIBUJO CILINDRO');
   }
 
 

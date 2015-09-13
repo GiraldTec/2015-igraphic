@@ -4,7 +4,7 @@ function initArrayBufferForLaterUse(gl, data, num, type) {
   // Create a buffer object
   var buffer = gl.createBuffer();
   if (!buffer) {
-    console.log('Failed to create the buffer object');
+    //console.log('Failed to create the buffer object');
     return null;
   }
   // Write date into the buffer object
@@ -22,7 +22,7 @@ function initElementArrayBufferForLaterUse(gl, data, type) {
   // Create a buffer object
   var buffer = gl.createBuffer();
   if (!buffer) {
-    console.log('Failed to create the buffer object');
+    //console.log('Failed to create the buffer object');
     return null;
   }
   // Write date into the buffer object

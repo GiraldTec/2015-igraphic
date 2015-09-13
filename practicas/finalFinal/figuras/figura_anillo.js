@@ -38,7 +38,7 @@ function FiguraAnillo (div, rat1, rat2, color) {
       mat_aux.multiply(this.matrizPropia);
       this.cara_m.dibuja(camara, mat_aux, handler);
 
-    console.log('DIBUJO Anillo');
+    //console.log('DIBUJO Anillo');
   }
 
 
