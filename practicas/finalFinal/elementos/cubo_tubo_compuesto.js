@@ -2,7 +2,7 @@
 
 function CuboTuboCompuesto (div, rat1, rat2) {
 
-  this.cara_m = new MallaTubo(div, rat2, 0.0, 1.5);
+  this.cara_m = new MallaTubo(div, rat1, rat2, 1.5, 0);
 
   this.colores = [];    
   this.matricesCaras = [];
@@ -64,7 +64,7 @@ function CuboTuboCompuesto (div, rat1, rat2) {
 
   this.dibuja = function(camara, handler){ 
 
-    for (var iCara=0 ; iCara < 6 ; iCara++){
+    for (var iCara=0 ; iCara < 1 ; iCara++){
       var mat_aux =  new Matrix4();
       mat_aux.multiply(this.matrizPropia);
       mat_aux.multiply(this.matricesCaras[iCara]);

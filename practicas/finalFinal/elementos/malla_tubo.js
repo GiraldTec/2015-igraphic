@@ -1,5 +1,5 @@
 // Malla tubo
-function MallaTubo (div, rat1, rat2, altura) {
+function MallaTubo (div, rat1, rat2, altura,  nDir) {
   this.puntos = [];			//	Float32Array
   this.normales = [];  // la primera es 0,1,0
   this.indices = [];		//	Uint8Array
@@ -8,6 +8,7 @@ function MallaTubo (div, rat1, rat2, altura) {
   this.rad1 = rat1;
   this.rad2 = rat2;
   this.altura = altura;
+  this.nDireccion = nDir;
 
   this.construye = function(gl) {
   	var x1_orig = 0.0;
@@ -39,7 +40,10 @@ function MallaTubo (div, rat1, rat2, altura) {
 
 		var n_aux = new Vector4();
 		n_aux.elements[0] = 0.0;
-		n_aux.elements[1] = 1.0;
+		if(this.nDireccion == 0)
+			n_aux.elements[1] = 1.0;
+		else
+			n_aux.elements[1] = -1.0;
 		n_aux.elements[2] = 0.0;
 		n_aux.elements[3] = 0.0;
 

@@ -12,7 +12,7 @@ function main() {
   var progHand = new ProgramHandler(gl);
 
   var hab = new Habitacion(gl);
-  habitacion_prueba(hab, gl, canvas)
+  habitacion_01(hab, gl, canvas)
 
 	gl.clearColor(0.0, 1.0, 0.0, 1);
   gl.enable(gl.DEPTH_TEST);
@@ -20,23 +20,14 @@ function main() {
   gl.viewport(0, 0, canvas.width, canvas.height);
 
 
-  //var tick = function() {
-//	  hab.tick();
-//	  gl.viewport(0, 0, canvas.width, canvas.height);
+  var tick = function() {
+	  hab.tick();
+	  gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);    //
 	  hab.dibuja(progHand);
-	  //window.requestAnimationFrame(tick, canvas);
-  //};
-  //tick();
+	  window.requestAnimationFrame(tick, canvas);
+  };
+  tick();
 
 }
 
-function habitacion_prueba(habitacion, gl, canvas){
-	var cubC = new CuboTorusCompuesto(7,7 , 1.5,1.0);
-	cubC.construye(gl);
-  //cubC.desplaza(0.0,1.0,0.0);
-  //cubC.escala(1.0,1.0,2.0);
-  //cubC.rota(30, 1, 0, 0);
-	habitacion.add_elemento(cubC);
-	habitacion.set_camara(new Camara(gl, canvas.width/canvas.height))
-}

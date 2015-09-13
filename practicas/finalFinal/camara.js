@@ -1,13 +1,17 @@
 // Camara
-function Camara (gl, ratio) {
+function Camara (gl, ratio, e_x, e_y, e_z, close, far) {
 
 	this.canvas = gl;
 	this.proyeccion_M = new Matrix4();
 	this.modelado_M = new Matrix4();
+	this.matrizPropia = new Matrix4();
 
-	this.eye = new Vector3([6.0, 6.0, 14.0]);					// DECISION DE DISEÃ‘O
+	this.eye = new Vector3([e_x, e_y, e_z]);					// DECISION DE DISEÃ‘O
 	this.atPoint = new Vector3([0.0, 0.0, 0.0]);
 	this.upVector = new Vector3([0.0, 1.0, 0.0]);
+
+	this.close = close;
+	this.far = far;
 
 	this.ratio = ratio;
 
@@ -19,20 +23,20 @@ function Camara (gl, ratio) {
 
 	this.rotar = function( angulo, x_cord, y_cord, z_cord){
 		this.modelado_M.rotate(angulo, x_cord, y_cord, z_cord);
-		this.recalcular();
+		this.calcular();
 	}
 
 	this.set_eye = function (nuevo){
 		this.eye = nuevo;
-		this.recalcular();
+		this.calcular();
 	}
 	this.set_atPoint = function (nuevo){
 		this.atPoint = nuevo;
-		this.recalcular();
+		this.calcular();
 	}
 	this.set_upVector = function (nuevo){
 		this.upVector = nuevo;
-		this.recalcular();
+		this.calcular();
 	}
 
 	this.calcular = function(){
@@ -53,7 +57,7 @@ function Camara (gl, ratio) {
 		var v_atPoint = new_atPoint.elements;
 		var v_upVector = new_upVector.elements;
 
-		this.proyeccion_M.setPerspective(30, this.ratio, 1, 100);
+		this.proyeccion_M.setPerspective(30, this.ratio, this.close, this.far);
 		this.proyeccion_M.lookAt(v_eye[0], v_eye[1], v_eye[2], 
 																	v_atPoint[0], v_atPoint[1], v_atPoint[2], 
 																		v_upVector[0], v_upVector[1], v_upVector[2]);
@@ -63,6 +67,30 @@ function Camara (gl, ratio) {
 	this.get_eye = function (){		return this.eye;	}
 	this.get_atPoint = function (){		return this.atPoint;	}
 	this.get_upVector = function (){		return this.upVector;	}
+
+
+	this.roll = function( ang ){ // modificar el Up
+
+		var m_aux = new Matrix4();
+		m_aux.rotate(ang, 0, 0, 1);
+
+		var v4_upVector = new Vector4(this.upVector.elements);
+		v4_upVector.elements[3] = 0.0;
+		var new_upVector = this.modelado_M.multiplyVector4(v4_upVector);
+
+		this.upVector = new Vector3(new_upVector.elements);
+
+		this.calcular();
+
+	}
+
+	this.yaw = function(){
+
+	}
+
+	this.pitch = function(){
+
+	}
 
 
 }

@@ -10,13 +10,13 @@ var VSHADER_MULTINORMAL =
   '  gl_Position = u_MvpMatrix * a_Position;\n' +
   '  vec4 vertexPosition = u_ModelMatrix * a_Position;\n' +
   // Shading calculation to make the arm look three-dimensional
-  '  vec3 lightDirection = normalize(vec3(0.0, 0.0, 2.0));\n' + // Light direction  // luz direccional
+  '  vec3 lightDirection = normalize(vec3(0.0, 10.0, 0.0));\n' + // Light direction  // luz direccional
   '  vec4 color = u_Color;\n' +  // Robot color
   '  vec3 normal = normalize((u_NormalMatrix * a_Normal).xyz);\n' +
   '  float nDotL = max(dot(normal, lightDirection), 0.0);\n' +
   '  v_Color = vec4(color.rgb * nDotL + vec3(0.1), color.a);\n' +
 
-  '  vec3 lightDirection2 = normalize(vec3(2.0, 2.0, 0.0));\n' + // Light direction
+  '  vec3 lightDirection2 = normalize(vec3(0.0, 10.0, 0.0));\n' + // Light direction
   '  vec4 color2 = u_Color;\n' +  // Robot color
   '  vec3 normal2 = normalize((u_NormalMatrix * a_Normal).xyz);\n' +
   '  float nDotL2 = max(dot(normal2, lightDirection2), 0.0);\n' +

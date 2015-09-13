@@ -81,7 +81,7 @@ function main() {
   }
 
   // Set the clear color and enable the depth test
-  gl.clearColor(1.0, 1.0, 1.0, 1.0);
+  gl.clearColor(0.0, 0.0, 0.0, 1.0);
   gl.enable(gl.DEPTH_TEST);
 
   var camara = new Camara(gl,canvas.width/canvas.height);
