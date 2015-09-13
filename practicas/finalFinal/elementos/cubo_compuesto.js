@@ -1,10 +1,10 @@
 // Cubo compuesto
 
-function CuboCompuesto (div, color) {
+function CuboCompuesto (div) {
 
   this.cara_m = new MallaCuadrada(div);
 
-  this.colorRGBA = color;    
+  this.colores = [];    
   this.matricesCaras = [];
   this.matrizPropia = new Matrix4();
 
@@ -60,13 +60,13 @@ function CuboCompuesto (div, color) {
     
   }
 
-  this.dibuja = function(camara, handler, luzAmb, lucesDir, lucesPos){ 
+  this.dibuja = function(camara, handler){ 
 
     for (var iCara=0 ; iCara < 6 ; iCara++){
       var mat_aux =  new Matrix4();
       mat_aux.multiply(this.matrizPropia);
       mat_aux.multiply(this.matricesCaras[iCara]);
-      this.cara_m.dibuja(camara, mat_aux, handler, this.colorRGBA ,luzAmb, lucesDir, lucesPos);
+      this.cara_m.dibuja(camara, mat_aux, handler);
     }
 
     //console.log('DIBUJO cubo');

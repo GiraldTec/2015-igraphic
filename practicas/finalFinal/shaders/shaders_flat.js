@@ -26,17 +26,17 @@ var VSHADER_FLAT =
     '  vec3 lightDirection_pos = normalize(u_LightPosition[i] - vec3(vertexPosition));\n' + 
     '  float nDotL_pos = max(dot(lightDirection_pos, normal), 0.0);\n' +
     '  vec3 diffuse_pos = u_PosLightColor[i] * u_Color.rgb * nDotL_pos;\n' +
-    '  v_Color = v_Color*0.85  + vec4(diffuse_pos + ambient, u_Color.a);\n' + 
+    '  v_Color = v_Color  + vec4(diffuse_pos + ambient, u_Color.a);\n' + 
   '  }\n' + 
 
   '  for(int i = 0; i < 2 ; i++){\n' +  // Procesamos las luces direccionales
     '  vec3 lightDirection_dir = normalize(u_LightDirection[i]);\n' + 
     '  float nDotL_dir = max(dot(lightDirection_dir, normal), 0.0);\n' +
     '  vec3 diffuse_dir = u_DirLightColor[i] * u_Color.rgb * nDotL_dir;\n' +
-    '  v_Color = v_Color*0.85  + vec4(diffuse_dir + ambient, u_Color.a);\n' + 
+    '  v_Color = v_Color  + vec4(diffuse_dir + ambient, u_Color.a);\n' + 
   '  }\n' + 
 
-  '  v_Color = v_Color *0.25;\n' +
+  '  v_Color = v_Color *0.75;\n' +
   '}\n';
 
 // Fragment shader program

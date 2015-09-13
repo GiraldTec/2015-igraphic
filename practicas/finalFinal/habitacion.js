@@ -1,7 +1,7 @@
 // Habitacion
 function Habitacion (gl) {
 
-	this.luz_ambiente = [0.0,0.0,0.0]; 
+	this.luz_ambiente = new Vector3([0.1,0.1,0.1]); 
 	this.luces_direccionales = [];
 	this.luces_punto = [];
 
@@ -24,7 +24,7 @@ function Habitacion (gl) {
 	this.dibuja = function(handler){
 
 		for(var i = 0;  i < this.elementos.length; i++){
-			this.elementos[i].dibuja(this.camara, handler, this.modelado_M, this.luz_ambiente, this.luces_direccionales, this.luces_punto);
+			this.elementos[i].dibuja(this.camara, handler, this.modelado_M);
 		}
 
 	this.desplaza = function(desp_x, desp_y, desp_z){
