@@ -102,15 +102,6 @@ function MallaTorus (div1, div2, rat1, rat2) {
 
 		camara.canvas.uniform4f(program.u_color, color[0], color[1], color[2], color[3]);
 
-		camara.canvas.uniform3fv(program.u_PosLightColor, [1.0, 1.0,0, 0,0,1], 2);
-		camara.canvas.uniform3fv(program.u_LightPosition, [2.3, 4.0, -3.5, 0.0, -4.0, 3.5], 2);
-
-		camara.canvas.uniform3fv(program.u_DirLightColor, [1.0, 1.0,0, 0,0,1], 2);
-		camara.canvas.uniform3fv(program.u_LightDirection, [2.3, 4.0, -3.5, 0.0, -4.0, 3.5], 2);
-
-
-		camara.canvas.uniform3f(program.u_AmbientLight, 0,0,0);
-
 		var g_mvpMatrix = new Matrix4();
 		g_mvpMatrix.set(camara.proyeccion_M);
 		g_mvpMatrix.multiply(g_modelMatrix);

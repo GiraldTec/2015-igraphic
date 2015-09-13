@@ -5,33 +5,22 @@ var VSHADER_MULTINORMAL =
   'uniform mat4 u_MvpMatrix;\n' +
   'uniform mat4 u_ModelMatrix;\n' +   // Model matrix
   'uniform mat4 u_NormalMatrix;\n' +
-  'uniform vec3 u_PosLightColor[2];\n' +
-  'uniform vec3 u_LightPosition[2];\n' +
-  'uniform vec3 u_DirLightColor[2];\n' +
-  'uniform vec3 u_LightDirection[2];\n' +
-  'uniform vec3 u_AmbientLight;\n' +  
   'varying vec4 v_Color;\n' +
   'void main() {\n' +
   '  gl_Position = u_MvpMatrix * a_Position;\n' +
   '  vec4 vertexPosition = u_ModelMatrix * a_Position;\n' +
-  
-  '  vec3 ambient = u_AmbientLight * u_Color.rgb;\n' +
-  '  v_Color = vec4(0.0);\n' + 
+  // Shading calculation to make the arm look three-dimensional
+  '  vec3 lightDirection = normalize(vec3(0.0, 10.0, 0.0));\n' + // Light direction  // luz direccional
+  '  vec4 color = u_Color;\n' +  // Robot color
   '  vec3 normal = normalize((u_NormalMatrix * a_Normal).xyz);\n' +
+  '  float nDotL = max(dot(normal, lightDirection), 0.0);\n' +
+  '  v_Color = vec4(color.rgb * nDotL + vec3(0.1), color.a);\n' +
 
-  '  for(int i = 0; i < 2 ; i++){\n' +  // Procesamos las luces de punto
-    '  vec3 lightDirection_pos = normalize(u_LightPosition[i] - vec3(vertexPosition));\n' + 
-    '  float nDotL_pos = max(dot(lightDirection_pos, normal), 0.0);\n' +
-    '  vec3 diffuse_pos = u_PosLightColor[i] * u_Color.rgb * nDotL_pos;\n' +
-    '  v_Color = v_Color  + vec4(diffuse_pos + ambient, u_Color.a);\n' + 
-  '  }\n' + 
-
-  '  for(int i = 0; i < 2 ; i++){\n' +  // Procesamos las luces direccionales
-    '  vec3 lightDirection_dir = normalize(u_LightDirection[i]);\n' + 
-    '  float nDotL_dir = max(dot(lightDirection_dir, normal), 0.0);\n' +
-    '  vec3 diffuse_dir = u_DirLightColor[i] * u_Color.rgb * nDotL_dir;\n' +
-    '  v_Color = v_Color  + vec4(diffuse_dir + ambient, u_Color.a);\n' + 
-  '  }\n' + 
+  '  vec3 lightDirection2 = normalize(vec3(0.0, 10.0, 0.0));\n' + // Light direction
+  '  vec4 color2 = u_Color;\n' +  // Robot color
+  '  vec3 normal2 = normalize((u_NormalMatrix * a_Normal).xyz);\n' +
+  '  float nDotL2 = max(dot(normal2, lightDirection2), 0.0);\n' +
+  '  v_Color = v_Color + vec4(color2.rgb * nDotL2 + vec3(0.1), color2.a);\n' +
 
   '  v_Color = v_Color *0.75;\n' +
   '}\n';

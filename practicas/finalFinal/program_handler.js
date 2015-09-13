@@ -17,18 +17,8 @@ function flatProgram(gl, vs, fs){
   prog.u_MvpMatrix = gl.getUniformLocation(prog, 'u_MvpMatrix');
   prog.u_ModelMatrix = gl.getUniformLocation(prog, 'u_ModelMatrix');
   prog.u_NormalMatrix = gl.getUniformLocation(prog, 'u_NormalMatrix');
-
-
-  prog.u_PosLightColor = gl.getUniformLocation(prog, 'u_PosLightColor');
-  prog.u_LightPosition = gl.getUniformLocation(prog, 'u_LightPosition');
-  prog.u_DirLightColor = gl.getUniformLocation(prog, 'u_DirLightColor');
-  prog.u_LightDirection = gl.getUniformLocation(prog, 'u_LightDirection');
-  prog.u_AmbientLight = gl.getUniformLocation(prog, 'u_AmbientLight');
-
-  if ( prog.a_Position < 0 || !prog.u_Normal || !prog.u_color || !prog.u_MvpMatrix 
-        || !prog.u_ModelMatrix || !prog.u_NormalMatrix || !prog.u_PosLightColor 
-          || !prog.u_LightPosition || !prog.u_DirLightColor || !prog.u_LightDirection || !prog.u_AmbientLight ){
-    console.log('Failed to get the storage location of attribute or uniform variable from prog'); 
+  if ( prog.a_Position < 0 || !prog.u_Normal || !prog.u_color || !prog.u_MvpMatrix || !prog.u_ModelMatrix || !prog.u_NormalMatrix ){
+    //console.log('Failed to get the storage location of attribute or uniform variable from prog'); 
     return undefined;
   }
 
@@ -44,18 +34,8 @@ function multinormalProgram(gl, vs, fs){
   prog.u_MvpMatrix = gl.getUniformLocation(prog, 'u_MvpMatrix');
   prog.u_ModelMatrix = gl.getUniformLocation(prog, 'u_ModelMatrix');
   prog.u_NormalMatrix = gl.getUniformLocation(prog, 'u_NormalMatrix');
-
-  prog.u_PosLightColor = gl.getUniformLocation(prog, 'u_PosLightColor');
-  prog.u_LightPosition = gl.getUniformLocation(prog, 'u_LightPosition');
-  prog.u_DirLightColor = gl.getUniformLocation(prog, 'u_DirLightColor');
-  prog.u_LightDirection = gl.getUniformLocation(prog, 'u_LightDirection');
-  prog.u_AmbientLight = gl.getUniformLocation(prog, 'u_AmbientLight');
-
-
-  if ( prog.a_Position < 0 || prog.a_Normal < 0 || !prog.u_color || !prog.u_MvpMatrix 
-    || !prog.u_ModelMatrix || !prog.u_NormalMatrix || !prog.u_PosLightColor 
-          || !prog.u_LightPosition || !prog.u_DirLightColor || !prog.u_LightDirection || !prog.u_AmbientLight ){
-    console.log('Failed to get the storage location of attribute or uniform variable from multinormal '); 
+  if ( prog.a_Position < 0 || prog.a_Normal < 0 || !prog.u_color || !prog.u_MvpMatrix || !prog.u_ModelMatrix || !prog.u_NormalMatrix ){
+    //console.log('Failed to get the storage location of attribute or uniform variable from multinormal '); 
     return undefined;
   }
 
