@@ -67,7 +67,7 @@ function MallaCirculo (div) {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
   }
 
-	this.dibuja = function(camara, matrizMod, handler){
+	this.dibuja = function(camara, matrizMod, handler, color){
 
   	var program = handler.flat;
 
@@ -89,7 +89,7 @@ function MallaCirculo (div) {
 
 		var g_modelMatrix = new Matrix4(matrizMod);
 
-		camara.canvas.uniform4f(program.u_color, 1.0,0.0,0.0, 1.0);
+		camara.canvas.uniform4f(program.u_color, color[0], color[1], color[2], color[3]);
 		camara.canvas.uniform4f(program.u_Normal, 0.0,0.0,1.0, 0.0);
 
 		var g_mvpMatrix = new Matrix4();
